@@ -1,0 +1,11 @@
+main_menu:
+  item_slots: [ 10, 12, 14, 16 ]
+
+storage:
+  type: sqlite  # veya mysql
+  mysql:
+    host: localhost
+    port: 3306
+    database: xanth_help
+    username: root
+    password: ""

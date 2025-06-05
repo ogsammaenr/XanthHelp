@@ -1,0 +1,19 @@
+types:
+  GENEL:
+    permission: "xanthhelp.type.genel"
+  TEKNIK:
+    permission: "xanthhelp.type.teknik"
+  KURALLAR:
+    permission: "xanthhelp.type.kurallar"
+
+categories:
+  genel_sorun:
+    type: "GENEL"
+  herhangi_birsey:
+    type: "GENEL"
+  plugin_hatasi:
+    type: "TEKNIK"
+  asdf:
+    type: "TEKNIK"
+  hile_bildirimi:
+    type: "KURALLAR"

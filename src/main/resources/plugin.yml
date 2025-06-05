@@ -1,0 +1,27 @@
+name: XanthHelp
+version: '1.0-SNAPSHOT'
+main: xanth.ogsammaenr.xanthHelp.XanthHelp
+api-version: '1.21'
+
+commands:
+  yardım:
+    description: "Yardım talebi oluşturmak için ana menüyü açar"
+    usage: /yardım
+  adminyardım:
+    description: "Adminler için yardım taleplerini yönetme komudu"
+    usage: /adminyardım
+    permission: xanthhelp.adminhelp
+  genelyardım:
+    description: "genel kategorisi"
+    usage: /genelyardım
+  teknikyardım:
+    description: "plugin hatası"
+    usage: /teknikyardım
+  kurallaryardım:
+    description: "kurallar"
+    usage: /kurallaryardım
+
+permissions:
+  xanthhelp.adminhelp:
+    description: "Admin komudu"
+    default: op

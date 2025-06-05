@@ -1,0 +1,97 @@
+# ======================================================
+# Kategorileri türlerinin arayüzdeki özellikleri
+# ======================================================
+
+category-types:
+  items:
+    GENEL:
+      icon:
+        material: BOOK
+        name: "&aGenel Destek"
+        lore:
+          - "&7Her türlü genel sorun"
+          - "&eTıklayarak görüntüle"
+      slot: 10
+
+    TEKNIK:
+      icon:
+        material: REDSTONE
+        name: "&cTeknik Destek"
+        lore:
+          - "&7Teknik problemler"
+          - "&eTıklayarak görüntüle"
+      slot: 12
+
+    KURALLAR:
+      icon:
+        material: PAPER
+        name: "&eKurallar"
+        lore:
+          - "&7Kuralları incelemek için"
+          - "&eTıklayarak görüntüle"
+      slot: 14
+
+  general:
+    rows: 3
+    title: "&aYardım Menüsü"
+    filler:
+      material: GRAY_STAINED_GLASS_PANE
+      name: " "
+
+  # ======================================================
+  # Kategorilerin arayüzdeki özellikleri
+  # ======================================================
+
+categories:
+  items:
+    genel_sorun:
+      icon:
+        material: WRITABLE_BOOK
+        name: "&bGenel Sorun"
+        lore:
+          - "&7Her türlü genel problem"
+          - "&eTıklayarak detayları gör"
+      slot: 10
+
+    herhangi_birsey:
+      icon:
+        material: PAPER
+        name: "&abişey"
+        lore:
+          - "&7problemli şeyler"
+          - "&atıkla"
+      slot: 11
+
+    plugin_hatasi:
+      icon:
+        material: COMMAND_BLOCK
+        name: "&cPlugin Hatası"
+        lore:
+          - "&7Eklenti ile ilgili problemler"
+          - "&eDetayları görüntülemek için tıkla"
+      slot: 10
+
+    asdf:
+      icon:
+        material: STONE
+        name: "&cPlugin Hatası"
+        lore:
+          - "&7Eklenti ile ilgili problemler"
+          - "&eDetayları görüntülemek için tıkla"
+      slot: 11
+
+    hile_bildirimi:
+      icon:
+        material: BARRIER
+        name: "&4Hile Bildirimi"
+        lore:
+          - "&7Hile kullananları bildir"
+          - "&eTıklayarak detayları incele"
+      slot: 14
+
+  general:
+    rows: 3
+    title: "&cKategori Seçimi"
+    filler:
+      material: BLACK_STAINED_GLASS_PANE
+      name: " "

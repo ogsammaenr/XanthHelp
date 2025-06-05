@@ -1,0 +1,197 @@
+package xanth.ogsammaenr.xanthHelp.storage;
+
+import xanth.ogsammaenr.xanthHelp.XanthHelp;
+import xanth.ogsammaenr.xanthHelp.manager.CategoryManager;
+import xanth.ogsammaenr.xanthHelp.model.Category;
+import xanth.ogsammaenr.xanthHelp.model.Ticket;
+import xanth.ogsammaenr.xanthHelp.model.TicketStatus;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+public class TicketDAO {
+    private final DatabaseConnector connector;
+    private CategoryManager categoryManager;
+
+    public TicketDAO(XanthHelp plugin) {
+        this.connector = plugin.getDatabaseConnector();
+        this.categoryManager = plugin.getCategoryManager();
+    }
+
+    // Ticket oluşturma
+    public void createTicket(Ticket ticket) throws SQLException {
+        String sql = "INSERT INTO tickets (ticket_id, creator_uuid, category_id, status, description, created_at, assigned_staff_uuid, assigned_at, resolved_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = connector.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, ticket.getTicketId());
+            stmt.setString(2, ticket.getCreatorUUID().toString());
+            stmt.setString(3, ticket.getCategory().getId());
+            stmt.setString(4, ticket.getStatus().name());
+            stmt.setString(5, ticket.getDescription());
+            stmt.setString(6, ticket.getCreatedAt().toString());
+            stmt.setString(7, ticket.getAssignedStaffUUID() != null ? ticket.getAssignedStaffUUID().toString() : null);
+            stmt.setString(8, ticket.getAssignedAt() != null ? ticket.getAssignedAt().toString() : null);
+            stmt.setString(9, ticket.getResolvedAt() != null ? ticket.getResolvedAt().toString() : null);
+            stmt.executeUpdate();
+        }
+    }
+
+    // Ticket ID ile getirme
+    public Ticket getTicketById(String ticketId) throws SQLException {
+        String sql = "SELECT * FROM tickets WHERE ticket_id = ?";
+        try (PreparedStatement stmt = connector.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, ticketId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return mapResultSetToTicket(rs);
+            }
+        }
+        return null;
+    }
+
+    // Belirli kullanıcıya ait ticketları listeleme
+    public List<Ticket> getTicketsByCreatorUUID(String creatorUUID) throws SQLException {
+        List<Ticket> tickets = new ArrayList<>();
+        String sql = "SELECT * FROM tickets WHERE creator_uuid = ?";
+        try (PreparedStatement stmt = connector.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, creatorUUID);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                tickets.add(mapResultSetToTicket(rs));
+            }
+        }
+        return tickets;
+    }
+
+    // Ticket durumu güncelleme
+    public void updateTicketStatus(String ticketId, TicketStatus status) throws SQLException {
+        String sql = "UPDATE tickets SET status = ? WHERE ticket_id = ?";
+        try (PreparedStatement stmt = connector.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, status.name());
+            stmt.setString(2, ticketId);
+            stmt.executeUpdate();
+        }
+    }
+
+    // Ticket silme
+    public void deleteTicket(String ticketId) throws SQLException {
+        String sql = "DELETE FROM tickets WHERE ticket_id = ?";
+        try (PreparedStatement stmt = connector.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, ticketId);
+            stmt.executeUpdate();
+        }
+    }
+
+    //  Bir yetkilinin aldığı bütün ticketlar
+    public List<Ticket> getTicketsByStaffUUID(String staffUUID) throws SQLException {
+        List<Ticket> tickets = new ArrayList<>();
+        String sql = "SELECT * FROM tickets WHERE assigned_staff_uuid = ?";
+        try (PreparedStatement stmt = connector.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, staffUUID);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                tickets.add(mapResultSetToTicket(rs));
+            }
+        }
+        return tickets;
+    }
+
+    //  Bütün ticketlar
+    public List<Ticket> getAllTickets() throws SQLException {
+        List<Ticket> tickets = new ArrayList<>();
+        String sql = "SELECT * FROM tickets";
+        try (PreparedStatement stmt = connector.getConnection().prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                tickets.add(mapResultSetToTicket(rs));
+            }
+        }
+        return tickets;
+    }
+
+    //  Ticketın bütün alanlarını günceller
+    public void updateTicket(Ticket ticket) throws SQLException {
+        String sql = "UPDATE tickets SET creator_uuid = ?, category_id = ?, status = ?, description = ?, created_at = ?, assigned_staff_uuid = ?, assigned_at = ?, resolved_at = ? WHERE ticket_id = ?";
+        try (PreparedStatement stmt = connector.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, ticket.getCreatorUUID().toString());
+            stmt.setString(2, ticket.getCategory().getId());
+            stmt.setString(3, ticket.getStatus().name());
+            stmt.setString(4, ticket.getDescription());
+            stmt.setString(5, ticket.getCreatedAt().toString());
+            stmt.setString(6, ticket.getAssignedStaffUUID() != null ? ticket.getAssignedStaffUUID().toString() : null);
+            stmt.setString(7, ticket.getAssignedAt() != null ? ticket.getAssignedAt().toString() : null);
+            stmt.setString(8, ticket.getResolvedAt() != null ? ticket.getResolvedAt().toString() : null);
+            stmt.setString(9, ticket.getTicketId());
+            stmt.executeUpdate();
+        }
+    }
+
+    // AssignedStaff ve AssignedAt güncelleme
+    public void updateAssignedStaff(String ticketId, UUID staffUUID, LocalDateTime assignedAt) throws SQLException {
+        String sql = "UPDATE tickets SET assigned_staff_uuid = ?, assigned_at = ? WHERE ticket_id = ?";
+        try (PreparedStatement stmt = connector.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, staffUUID.toString());
+            stmt.setString(2, assignedAt.toString());
+            stmt.setString(3, ticketId);
+            stmt.executeUpdate();
+        }
+    }
+
+    // ResolvedAt ve Status güncelleme
+    public void updateResolvedAt(String ticketId, LocalDateTime resolvedAt) throws SQLException {
+        String sql = "UPDATE tickets SET resolved_at = ?, status = ? WHERE ticket_id = ?";
+        try (PreparedStatement stmt = connector.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, resolvedAt.toString());
+            stmt.setString(2, TicketStatus.RESOLVED.name());
+            stmt.setString(3, ticketId);
+            stmt.executeUpdate();
+        }
+    }
+
+    // Son olarak ResultSet'ten Ticket nesnesine dönüştürme metodu
+    private Ticket mapResultSetToTicket(ResultSet rs) throws SQLException {
+        String ticketId = rs.getString("ticket_id");
+        UUID creatorUUID = UUID.fromString(rs.getString("creator_uuid"));
+        String categoryId = rs.getString("category_id");
+        Category category = categoryManager.getCategory(categoryId); // categoryManager'dan alıyoruz
+        LocalDateTime createdAt = LocalDateTime.parse(rs.getString("created_at"));
+        String description = rs.getString("description");
+
+
+        Ticket ticket = new Ticket(
+                ticketId,
+                creatorUUID,
+                category,
+                description,
+                createdAt
+        );
+
+        TicketStatus status = TicketStatus.valueOf(rs.getString("status"));
+        if (status != null) {
+            ticket.setStatus(status);
+        }
+
+        String assignedStaffUUIDStr = rs.getString("assigned_staff_uuid");
+        if (assignedStaffUUIDStr != null) {
+            ticket.setAssignedStaffUUID(UUID.fromString(assignedStaffUUIDStr));
+        }
+
+        String assignedAt = rs.getString("assigned_at");
+        if (assignedAt != null) {
+            ticket.setAssignedAt(LocalDateTime.parse(assignedAt));
+        }
+
+        String resolvedAt = rs.getString("resolved_at");
+        if (resolvedAt != null) {
+            ticket.setResolvedAt(LocalDateTime.parse(resolvedAt));
+        }
+
+        return ticket;
+    }
+
+
+}
