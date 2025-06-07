@@ -2,10 +2,13 @@ package xanth.ogsammaenr.xanthHelp;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import xanth.ogsammaenr.xanthHelp.command.GenelYardımCommand;
 import xanth.ogsammaenr.xanthHelp.command.HelpCommand;
 import xanth.ogsammaenr.xanthHelp.command.TeknikYardımCommand;
+import xanth.ogsammaenr.xanthHelp.listener.ChatInputListener;
+import xanth.ogsammaenr.xanthHelp.listener.InventoryClickListener;
 import xanth.ogsammaenr.xanthHelp.manager.CategoryManager;
 import xanth.ogsammaenr.xanthHelp.manager.GuiConfigManager;
 import xanth.ogsammaenr.xanthHelp.manager.TicketManager;
@@ -24,6 +27,7 @@ public final class XanthHelp extends JavaPlugin {
     private DatabaseConnector databaseConnector;
     private TicketManager ticketManager;
     private GuiConfigManager guiConfigManager;
+    private ChatInputListener chatInputListener;
 
     private FileConfiguration guiConfig;
     private File guiFile;
@@ -47,9 +51,16 @@ public final class XanthHelp extends JavaPlugin {
         guiConfigManager = new GuiConfigManager(this);
         guiConfigManager.load();
 
+        chatInputListener = new ChatInputListener(this);
+
         getCommand("yardım").setExecutor(new HelpCommand(this));
         getCommand("genelyardım").setExecutor(new GenelYardımCommand());
         getCommand("teknikyardım").setExecutor(new TeknikYardımCommand());
+
+        PluginManager pm = getServer().getPluginManager();
+
+        pm.registerEvents(new InventoryClickListener(this), this);
+        pm.registerEvents(chatInputListener, this);
 
         getLogger().info("***** Xanth Help Enabled *****");
 
@@ -71,6 +82,7 @@ public final class XanthHelp extends JavaPlugin {
         }
         try {
             databaseConnector.connect();
+            databaseConnector.initializeTables();
         } catch (SQLException e) {
             getLogger().severe("Database connection failed: " + e.getMessage());
             e.printStackTrace();
@@ -104,6 +116,10 @@ public final class XanthHelp extends JavaPlugin {
 
     public GuiConfigManager getGuiConfigManager() {
         return guiConfigManager;
+    }
+
+    public ChatInputListener getChatInputListener() {
+        return chatInputListener;
     }
 
     public static XanthHelp getInstance() {

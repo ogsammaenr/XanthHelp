@@ -92,4 +92,19 @@ public class Ticket {
     public void markCanceled() {
         this.status = TicketStatus.CANCELED;
     }
+
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "ticketId='" + ticketId + '\'' +
+                ", creatorUUID=" + creatorUUID +
+                ", category=" + category +
+                ", status=" + status +
+                ", description='" + description + '\'' +
+                ", createdAt=" + createdAt +
+                ", assignedStaffUUID=" + assignedStaffUUID +
+                ", assignedAt=" + assignedAt +
+                ", resolvedAt=" + resolvedAt +
+                '}';
+    }
 }

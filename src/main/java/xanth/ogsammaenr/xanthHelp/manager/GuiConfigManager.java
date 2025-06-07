@@ -19,12 +19,13 @@ public class GuiConfigManager {
     private final Map<String, GuiCategoryTypeItem> categoryTypeItems = new HashMap<>();
     private final Map<String, GuiCategoryItem> categoryItems = new HashMap<>();
 
+    private final Map<String, String> categoryMenuTitles = new HashMap<>();
+    private final Map<String, Integer> categoryMenuRows = new HashMap<>();
+
     private int mainMenuRows;
     private String mainMenuTitle;
     private ItemStack categoryTypeFillerItem;
 
-    private int categoryMenuRows;
-    private String categoryMenuTitle;
     private ItemStack categoryFillerItem;
 
     private final XanthHelp plugin;
@@ -59,6 +60,13 @@ public class GuiConfigManager {
 
                 GuiCategoryTypeItem item = new GuiCategoryTypeItem(key, material, name, lore, slot);
                 categoryTypeItems.put(key, item);
+
+                // Kategori türünün menüsü ile ilgili kısımlar
+
+                String title = itemsSection.getString(key + ".title", "&cUndefined Title");
+                int rows = itemsSection.getInt(key + ".rows", 2);
+                categoryMenuTitles.put(key, title.replace("&", "§"));
+                categoryMenuRows.put(key, rows);
             }
         }
         categoryItems.clear();
@@ -97,8 +105,6 @@ public class GuiConfigManager {
         mainMenuRows = config.getInt("category-types.general.rows", 3);
         mainMenuTitle = ChatColor.translateAlternateColorCodes('&', config.getString("category-types.general.title", "&aYardım Menüsü"));
 
-        categoryMenuRows = config.getInt("categories.general.rows", 3);
-        categoryMenuTitle = ChatColor.translateAlternateColorCodes('&', config.getString("category-types.general.title", "&aYardım Menüsü"));
 
     }
 
@@ -146,17 +152,24 @@ public class GuiConfigManager {
         return categoryFillerItem;
     }
 
-    public int getCategoryMenuRows() {
-        return categoryMenuRows;
+    public String getCategoryMenuTitle(String categoryTypeId) {
+        return categoryMenuTitles.getOrDefault(categoryTypeId, "Yardım Menüsü");
     }
 
-    public String getCategoryMenuTitle() {
-        return categoryMenuTitle;
+    public int getCategoryMenuRows(String categoryTypeId) {
+        return categoryMenuRows.getOrDefault(categoryTypeId, 3);
     }
 
     public ItemStack getCategoryTypeFillerItem() {
         return categoryTypeFillerItem;
     }
 
-
+    public String getCategoryTypeIdByMenuTitle(String menuTitle) {
+        for (Map.Entry<String, String> entry : categoryMenuTitles.entrySet()) {
+            if (entry.getValue().equals(menuTitle)) {
+                return entry.getKey(); // categoryTypeId döner
+            }
+        }
+        return null; // bulunamazsa
+    }
 }

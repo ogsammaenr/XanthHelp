@@ -10,7 +10,6 @@ import xanth.ogsammaenr.xanthHelp.manager.GuiConfigManager;
 import xanth.ogsammaenr.xanthHelp.model.Category;
 import xanth.ogsammaenr.xanthHelp.model.CategoryType;
 import xanth.ogsammaenr.xanthHelp.model.GuiCategoryItem;
-import xanth.ogsammaenr.xanthHelp.util.Utils;
 
 import java.util.List;
 
@@ -44,8 +43,8 @@ public class CategoryMenu {
         }
 
         // Genel GUI ayarları
-        int rows = guiConfigManager.getCategoryMenuRows();
-        String title = guiConfigManager.getCategoryMenuTitle();
+        int rows = guiConfigManager.getCategoryMenuRows(categoryTypeId);
+        String title = guiConfigManager.getCategoryMenuTitle(categoryTypeId);
         Inventory gui = Bukkit.createInventory(null, rows * 9, title);
 
         // Filler item
@@ -62,12 +61,7 @@ public class CategoryMenu {
                 continue;
             }
 
-            ItemStack icon = Utils.createItem(
-                    item.getMaterial(),
-                    item.getName(),
-                    item.getLore()
-            );
-            gui.setItem(item.getSlot(), icon);
+            gui.setItem(item.getSlot(), item.toItemStack());
         }
 
         player.openInventory(gui);

@@ -1,9 +1,13 @@
 package xanth.ogsammaenr.xanthHelp.model;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import xanth.ogsammaenr.xanthHelp.XanthHelp;
+import xanth.ogsammaenr.xanthHelp.util.Utils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GuiCategoryItem extends GuiItem {
     private final Category category;
@@ -20,5 +24,13 @@ public class GuiCategoryItem extends GuiItem {
 
     public Category getCategory() {
         return category;
+    }
+
+    @Override
+    public ItemStack toItemStack() {
+        Map<String, String> nbtData = new HashMap<>();
+        nbtData.put("category_id", category.getId());
+
+        return Utils.createItem(getMaterial(), getName(), getLore(), nbtData);
     }
 }

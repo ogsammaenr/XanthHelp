@@ -56,4 +56,7 @@ public class TicketManager {
         ticketDAO.deleteTicket(ticketId);
     }
 
+    public int getNextTicketNumber() throws SQLException {
+        return ticketDAO.getNextTicketNumberUsingCount();
+    }
 }

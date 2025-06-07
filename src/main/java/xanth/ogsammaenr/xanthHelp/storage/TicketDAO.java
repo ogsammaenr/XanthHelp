@@ -193,5 +193,15 @@ public class TicketDAO {
         return ticket;
     }
 
-
+    //  Eklenecek ticket idyi döndürür
+    public int getNextTicketNumberUsingCount() throws SQLException {
+        String sql = "SELECT COUNT(*) AS total FROM tickets";
+        try (PreparedStatement stmt = connector.getConnection().prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total") + 1;
+            }
+        }
+        return 1;
+    }
 }
