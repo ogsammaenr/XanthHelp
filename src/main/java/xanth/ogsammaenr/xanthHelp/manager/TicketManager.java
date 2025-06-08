@@ -42,6 +42,25 @@ public class TicketManager {
         }
     }
 
+    public void unassignTicket(String ticketId) throws SQLException {
+        Ticket ticket = getTicketById(ticketId);
+        if (ticket == null || ticket.getStatus() != TicketStatus.IN_PROGRESS) {
+            return;
+        }
+        ticket.setAssignedStaffUUID(null);
+        ticket.setAssignedAt(null);
+        ticket.setStatus(TicketStatus.OPEN);
+
+        try {
+            ticketDAO.updateAssignedStaff(ticketId, null, null);
+            ticketDAO.updateTicketStatus(ticketId, TicketStatus.OPEN);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+    }
+
     public void resolveTicket(String ticketId) throws SQLException {
         Ticket ticket = ticketDAO.getTicketById(ticketId);
         if (ticket != null && (ticket.getStatus() == TicketStatus.IN_PROGRESS || ticket.getStatus() == TicketStatus.OPEN)) {

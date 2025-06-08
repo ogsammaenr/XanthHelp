@@ -9,6 +9,7 @@ import xanth.ogsammaenr.xanthHelp.model.TicketStatus;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -134,8 +135,18 @@ public class TicketDAO {
     public void updateAssignedStaff(String ticketId, UUID staffUUID, LocalDateTime assignedAt) throws SQLException {
         String sql = "UPDATE tickets SET assigned_staff_uuid = ?, assigned_at = ? WHERE ticket_id = ?";
         try (PreparedStatement stmt = connector.getConnection().prepareStatement(sql)) {
-            stmt.setString(1, staffUUID.toString());
-            stmt.setString(2, assignedAt.toString());
+            if (staffUUID != null) {
+                stmt.setString(1, staffUUID.toString());
+            } else {
+                stmt.setNull(1, Types.VARCHAR);
+            }
+
+            if (assignedAt != null) {
+                stmt.setString(2, assignedAt.toString());
+            } else {
+                stmt.setNull(2, Types.VARCHAR);
+            }
+
             stmt.setString(3, ticketId);
             stmt.executeUpdate();
         }
