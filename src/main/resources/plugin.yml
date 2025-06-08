@@ -20,6 +20,9 @@ commands:
   kurallaryardım:
     description: "kurallar"
     usage: /kurallaryardım
+  taleplerim:
+    description: "yardım taleplerim"
+    usage: /taleplerim
 
 permissions:
   xanthhelp.adminhelp:

@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import xanth.ogsammaenr.xanthHelp.XanthHelp;
 import xanth.ogsammaenr.xanthHelp.gui.AdminSupportMenu;
 import xanth.ogsammaenr.xanthHelp.gui.CategoryMenu;
+import xanth.ogsammaenr.xanthHelp.gui.PlayerTicketsMenu;
 import xanth.ogsammaenr.xanthHelp.gui.TicketDetailMenu;
 import xanth.ogsammaenr.xanthHelp.manager.CategoryManager;
 import xanth.ogsammaenr.xanthHelp.manager.GuiConfigManager;
@@ -92,26 +93,44 @@ public class InventoryClickListener implements Listener {
             if (clicked != null && clicked.hasItemMeta()) {
                 Player player = (Player) event.getWhoClicked();
                 String tab = Utils.getStringTag(clicked, "admin_tab");
-                if (tab != null && tab.equals("ALL")) {
-                    new AdminSupportMenu(plugin, null, 0).open(player);
-                } else if (tab != null && tab.equals("OPEN")) {
-                    new AdminSupportMenu(plugin, TicketStatus.OPEN, 0).open(player);
-                } else if (tab != null && tab.equals("IN_PROGRESS")) {
-                    new AdminSupportMenu(plugin, TicketStatus.IN_PROGRESS, 0).open(player);
-                } else if (tab != null && tab.equals("RESOLVED")) {
-                    new AdminSupportMenu(plugin, TicketStatus.RESOLVED, 0).open(player);
-                } else if (tab != null && tab.equals("CANCELED")) {
-                    new AdminSupportMenu(plugin, TicketStatus.CANCELED, 0).open(player);
-                } else if (tab != null && tab.equals("NEXT_PAGE")) {
-                    new AdminSupportMenu(plugin, ((filter.equals("ALL")) ? null : TicketStatus.valueOf(filter)), page + 1).open(player);
-                } else if (tab != null && tab.equals("PREVIOUS_PAGE")) {
-                    new AdminSupportMenu(plugin, ((filter.equals("ALL")) ? null : TicketStatus.valueOf(filter)), page - 1).open(player);
-                } else if (tab != null && tab.startsWith("TCK")) {
-                    try {
-                        new TicketDetailMenu(ticketManager.getTicketById(tab), player).open();
-                    } catch (SQLException e) {
-                        player.sendMessage("SQL tabanlı bir hata oluştu");
-                        throw new RuntimeException(e);
+
+                if (tab == null) return;
+                switch (tab) {
+                    case "ALL":
+                        new AdminSupportMenu(plugin, null, 0).open(player);
+                        break;
+                    case "OPEN":
+                        new AdminSupportMenu(plugin, TicketStatus.OPEN, 0).open(player);
+                        break;
+                    case "IN_PROGRESS":
+                        new AdminSupportMenu(plugin, TicketStatus.IN_PROGRESS, 0).open(player);
+                        break;
+                    case "RESOLVED":
+                        new AdminSupportMenu(plugin, TicketStatus.RESOLVED, 0).open(player);
+                        break;
+                    case "CANCELED":
+                        new AdminSupportMenu(plugin, TicketStatus.CANCELED, 0).open(player);
+                        break;
+                    case "NEXT_PAGE":
+                        TicketStatus nextFilter = filter.equals("ALL") ? null : TicketStatus.valueOf(filter);
+                        new AdminSupportMenu(plugin, nextFilter, ++page).open(player);
+                        break;
+
+                    case "PREVIOUS_PAGE":
+                        TicketStatus prevFilter = filter.equals("ALL") ? null : TicketStatus.valueOf(filter);
+                        new AdminSupportMenu(plugin, prevFilter, --page).open(player);
+                        break;
+
+                    default: {
+                        if (tab.startsWith("TCK")) {
+                            try {
+                                new TicketDetailMenu(ticketManager.getTicketById(tab), player).open();
+                            } catch (SQLException e) {
+                                player.sendMessage("SQL tabanlı bir hata oluştu");
+                                throw new RuntimeException(e);
+                            }
+                        }
+                        break;
                     }
                 }
             }
@@ -145,6 +164,38 @@ public class InventoryClickListener implements Listener {
                 } catch (SQLException e) {
                     player.sendMessage("§cSQL tabanlı bir hata oluştu");
                     throw new RuntimeException(e);
+                }
+            }
+        }
+
+        /// Oyuncu Ticket Menüsü Kontrolü
+        String playerTicketsMenuTitle = "§aDestek Taleplerim";
+        if (inventoryTitle.startsWith(playerTicketsMenuTitle)) {
+            event.setCancelled(true);
+            Player player = (Player) event.getWhoClicked();
+            String tab = Utils.getStringTag(clicked, "player_tickets_tab");
+            String[] parts = inventoryTitle.split(" ");
+            int page = Integer.parseInt(parts[parts.length - 1]);
+
+            if (tab == null) return;
+
+            switch (tab) {
+                case "previous_page":
+                    new PlayerTicketsMenu(plugin, --page).open(player);
+                    break;
+                case "next_page":
+                    new PlayerTicketsMenu(plugin, ++page).open(player);
+                    break;
+                default: {
+                    if (tab.startsWith("TCK")) {
+                        try {
+                            new TicketDetailMenu(ticketManager.getTicketById(tab), player).open();
+                        } catch (SQLException e) {
+                            player.sendMessage("SQL tabanlı bir hata oluştu");
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    break;
                 }
             }
         }

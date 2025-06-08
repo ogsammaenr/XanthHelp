@@ -64,12 +64,6 @@ public class TicketDetailMenu {
                         setName("§cBu Ticket Zaten Sahiplenilmiş").
                         addLore("çok geç").build());
             }
-        } else {
-            inv.setItem(31, new ItemBuilder(Material.RED_CONCRETE)
-                    .setName("§Yetkin yok")
-                    .addLore("burayı görememen lazım")
-                    .addLore("Bir yetkiliye haber ver")
-                    .build());
         }
 
         viewer.openInventory(inv);
