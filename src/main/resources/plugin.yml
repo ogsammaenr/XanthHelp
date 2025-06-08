@@ -11,15 +11,6 @@ commands:
     description: "Adminler için yardım taleplerini yönetme komudu"
     usage: /adminyardım
     permission: xanthhelp.adminhelp
-  genelyardım:
-    description: "genel kategorisi"
-    usage: /genelyardım
-  teknikyardım:
-    description: "plugin hatası"
-    usage: /teknikyardım
-  kurallaryardım:
-    description: "kurallar"
-    usage: /kurallaryardım
   taleplerim:
     description: "yardım taleplerim"
     usage: /taleplerim
