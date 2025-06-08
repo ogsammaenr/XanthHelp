@@ -59,4 +59,12 @@ public class TicketManager {
     public int getNextTicketNumber() throws SQLException {
         return ticketDAO.getNextTicketNumberUsingCount();
     }
+
+    public List<Ticket> getAllTickets() throws SQLException {
+        return ticketDAO.getAllTickets();
+    }
+
+    public List<Ticket> getTicketsByStatus(TicketStatus status) throws SQLException {
+        return ticketDAO.getTicketsByStatus(status);
+    }
 }

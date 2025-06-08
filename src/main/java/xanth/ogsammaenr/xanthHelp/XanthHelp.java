@@ -4,6 +4,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import xanth.ogsammaenr.xanthHelp.command.AdminHelpCommand;
 import xanth.ogsammaenr.xanthHelp.command.GenelYardımCommand;
 import xanth.ogsammaenr.xanthHelp.command.HelpCommand;
 import xanth.ogsammaenr.xanthHelp.command.TeknikYardımCommand;
@@ -56,6 +57,7 @@ public final class XanthHelp extends JavaPlugin {
         getCommand("yardım").setExecutor(new HelpCommand(this));
         getCommand("genelyardım").setExecutor(new GenelYardımCommand());
         getCommand("teknikyardım").setExecutor(new TeknikYardımCommand());
+        getCommand("adminyardım").setExecutor(new AdminHelpCommand());
 
         PluginManager pm = getServer().getPluginManager();
 

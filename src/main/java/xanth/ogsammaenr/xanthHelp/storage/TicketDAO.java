@@ -152,6 +152,23 @@ public class TicketDAO {
         }
     }
 
+    public List<Ticket> getTicketsByStatus(TicketStatus status) throws SQLException {
+        List<Ticket> tickets = new ArrayList<>();
+
+        String sql = "SELECT * FROM tickets WHERE status = ?";
+        try (PreparedStatement stmt = connector.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, status.name());
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Ticket ticket = mapResultSetToTicket(rs);
+                    tickets.add(ticket);
+                }
+            }
+        }
+
+        return tickets;
+    }
+
     // Son olarak ResultSet'ten Ticket nesnesine dönüştürme metodu
     private Ticket mapResultSetToTicket(ResultSet rs) throws SQLException {
         String ticketId = rs.getString("ticket_id");
