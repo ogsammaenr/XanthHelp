@@ -8,6 +8,7 @@ import xanth.ogsammaenr.xanthHelp.storage.TicketDAO;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class TicketManager {
@@ -16,7 +17,7 @@ public class TicketManager {
 
     public TicketManager(XanthHelp plugin) {
         this.plugin = plugin;
-        ticketDAO = new TicketDAO(plugin);
+        this.ticketDAO = new TicketDAO(plugin);
     }
 
     public void createTicket(Ticket ticket) throws SQLException {
@@ -31,6 +32,31 @@ public class TicketManager {
         return ticketDAO.getTicketsByCreatorUUID(creatorUUID.toString());
     }
 
+    public Ticket getActiveTicketByCreator(UUID creatorUUID) throws SQLException {
+        List<Ticket> tickets = ticketDAO.getTicketsByCreatorUUID(creatorUUID.toString());
+        for (Ticket ticket : tickets) {
+            if (ticket.getStatus() == TicketStatus.IN_PROGRESS) {
+                return ticket;
+            }
+        }
+        return null;
+    }
+
+    public Ticket getActiveTicketByStaff(UUID staffUUID) throws SQLException {
+        List<Ticket> tickets = ticketDAO.getAllTickets();
+        for (Ticket ticket : tickets) {
+            if (ticket.getStatus() == TicketStatus.IN_PROGRESS
+                    && staffUUID.equals(ticket.getAssignedStaffUUID())) {
+                return ticket;
+            }
+        }
+        return null;
+    }
+
+    public Optional<Ticket> getActiveTicketOf(UUID uuid) {
+        return ticketDAO.getActiveTicketByUser(uuid);
+    }
+
     public void assignTicket(String ticketId, UUID staffUUID) throws SQLException {
         Ticket ticket = ticketDAO.getTicketById(ticketId);
         if (ticket != null && ticket.getStatus() == TicketStatus.OPEN) {
@@ -40,6 +66,19 @@ public class TicketManager {
             ticketDAO.updateTicketStatus(ticketId, TicketStatus.IN_PROGRESS);
             ticketDAO.updateAssignedStaff(ticketId, staffUUID, ticket.getAssignedAt());
         }
+    }
+
+    public void assignTicketSafely(String ticketId, UUID staffUUID) throws SQLException {
+        if (hasActiveTicket(staffUUID)) {
+            throw new IllegalStateException("Yetkili zaten bir ticket ile ilgileniyor.");
+        }
+
+        Ticket ticket = getTicketById(ticketId);
+        if (ticket.getStatus() != TicketStatus.OPEN) {
+            throw new IllegalStateException("Ticket zaten işleniyor.");
+        }
+
+        assignTicket(ticketId, staffUUID);
     }
 
     public void unassignTicket(String ticketId) throws SQLException {
@@ -94,4 +133,13 @@ public class TicketManager {
     public List<Ticket> getTicketsByStatus(TicketStatus status) throws SQLException {
         return ticketDAO.getTicketsByStatus(status);
     }
+
+    public boolean hasActiveTicket(UUID creatorUUID) throws SQLException {
+        return getActiveTicketByCreator(creatorUUID) != null;
+    }
+
+    public boolean staffHasActiveTicket(UUID staffUUID) throws SQLException {
+        return getActiveTicketByStaff(staffUUID) != null;
+    }
+
 }

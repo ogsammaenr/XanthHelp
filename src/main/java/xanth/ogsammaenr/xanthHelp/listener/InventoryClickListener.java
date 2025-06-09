@@ -149,34 +149,28 @@ public class InventoryClickListener implements Listener {
             String[] parts = inventoryTitle.split(" ");
             String ticketId = parts[parts.length - 1];
 
-            if (tab != null && tab.equals("previous_page")) {
-                try {
+            try {
+                if (tab != null && tab.equals("previous_page")) {
                     if (player.hasPermission(ticketManager.getTicketById(ticketId).getCategory().getType().getPermission()))
                         new AdminSupportMenu(plugin, null, 0).open(player);
                     else
                         new PlayerTicketsMenu(plugin, 0).open(player);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            } else if (tab != null && tab.equals("accept")) {
-                try {
-                    ticketManager.assignTicket(ticketId, player.getUniqueId());
+
+                } else if (tab != null && tab.equals("accept")) {
+                    ticketManager.assignTicketSafely(ticketId, player.getUniqueId());
                     player.sendMessage("Bu Ticketla artık sen ilgileniyorsun");
+                    player.sendMessage(ticketManager.getTicketById(ticketId).toString());
                     player.closeInventory();
-                } catch (SQLException e) {
-                    player.sendMessage("§cSQL tabanlı bir hata oluştu");
-                    throw new RuntimeException(e);
-                }
-            } else if (tab != null && tab.equals("deny")) {
-                try {
+
+                } else if (tab != null && tab.equals("deny")) {
                     ticketManager.unassignTicket(ticketId);
                     player.sendMessage("§eBu ticketla artık ilgilenmiyorsun");
                     player.closeInventory();
                     new AdminSupportMenu(plugin, null, 0).open(player);
-                } catch (SQLException e) {
-                    player.sendMessage("§cSQL tabanlı bir hata oluştu");
-                    throw new RuntimeException(e);
                 }
+            } catch (SQLException e) {
+                player.sendMessage("§cSQL Tabanlı bir hata oluştu");
+                throw new RuntimeException(e);
             }
         }
 

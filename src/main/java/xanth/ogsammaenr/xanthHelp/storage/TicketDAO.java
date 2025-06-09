@@ -13,6 +13,7 @@ import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class TicketDAO {
@@ -104,6 +105,25 @@ public class TicketDAO {
             }
         }
         return tickets;
+    }
+
+    public Optional<Ticket> getActiveTicketByUser(UUID uuid) {
+        String query = "SELECT * FROM tickets WHERE (owner_uuid = ? OR assigned_staff = ?) AND status = 'IN_PROGRESS' LIMIT 1";
+
+        try (PreparedStatement stmt = connector.getConnection().prepareStatement(query)) {
+            stmt.setString(1, uuid.toString());
+            stmt.setString(2, uuid.toString());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(mapResultSetToTicket(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return Optional.empty();
     }
 
     //  Bütün ticketlar

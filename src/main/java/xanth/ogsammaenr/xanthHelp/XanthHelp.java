@@ -10,6 +10,7 @@ import xanth.ogsammaenr.xanthHelp.command.PlayerTicketsCommand;
 import xanth.ogsammaenr.xanthHelp.listener.ChatInputListener;
 import xanth.ogsammaenr.xanthHelp.listener.InventoryClickListener;
 import xanth.ogsammaenr.xanthHelp.manager.CategoryManager;
+import xanth.ogsammaenr.xanthHelp.manager.ChannelManager;
 import xanth.ogsammaenr.xanthHelp.manager.GuiConfigManager;
 import xanth.ogsammaenr.xanthHelp.manager.TicketManager;
 import xanth.ogsammaenr.xanthHelp.storage.DatabaseConnector;
@@ -28,6 +29,7 @@ public final class XanthHelp extends JavaPlugin {
     private TicketManager ticketManager;
     private GuiConfigManager guiConfigManager;
     private ChatInputListener chatInputListener;
+    private ChannelManager channelManager;
 
     private FileConfiguration guiConfig;
     private File guiFile;
@@ -120,6 +122,10 @@ public final class XanthHelp extends JavaPlugin {
 
     public ChatInputListener getChatInputListener() {
         return chatInputListener;
+    }
+
+    public ChannelManager getChannelManager() {
+        return channelManager;
     }
 
     public static XanthHelp getInstance() {

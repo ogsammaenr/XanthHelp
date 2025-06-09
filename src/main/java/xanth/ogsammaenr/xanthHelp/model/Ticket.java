@@ -26,6 +26,7 @@ public class Ticket {
         this.description = description;
         this.status = TicketStatus.OPEN;
         this.createdAt = createdAt;
+        this.participants = new ArrayList<>();
     }
 
     // Getters

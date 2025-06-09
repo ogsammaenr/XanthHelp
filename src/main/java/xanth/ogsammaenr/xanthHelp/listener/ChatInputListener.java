@@ -8,20 +8,20 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import xanth.ogsammaenr.xanthHelp.XanthHelp;
+import xanth.ogsammaenr.xanthHelp.manager.ChannelManager;
 import xanth.ogsammaenr.xanthHelp.manager.TicketManager;
 import xanth.ogsammaenr.xanthHelp.model.Category;
 import xanth.ogsammaenr.xanthHelp.model.Ticket;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class ChatInputListener implements Listener {
     private final XanthHelp plugin;
     private final TicketManager ticketManager;
+    private final ChannelManager channelManager;
+
     // Açıklama bekleyen oyuncular ve seçtikleri kategori
     private final Map<UUID, Category> waitingPlayers;
     private final Map<UUID, Long> waitingPlayersStartTime;
@@ -29,6 +29,7 @@ public class ChatInputListener implements Listener {
     public ChatInputListener(XanthHelp plugin) {
         this.plugin = plugin;
         this.ticketManager = plugin.getTicketManager();
+        this.channelManager = plugin.getChannelManager();
         this.waitingPlayers = new HashMap<>();
         this.waitingPlayersStartTime = new HashMap<>();
 
@@ -59,6 +60,7 @@ public class ChatInputListener implements Listener {
         Player player = event.getPlayer();
         UUID playerUUID = player.getUniqueId();
 
+        ///     Ticket Açıklaması Kontrolü
         if (waitingPlayers.containsKey(playerUUID)) {
             event.setCancelled(true); // Mesajı global sohbette gösterme
 
@@ -106,6 +108,21 @@ public class ChatInputListener implements Listener {
             // Oyuncuyu waitingPlayers'dan çıkar
             waitingPlayers.remove(playerUUID);
             waitingPlayersStartTime.remove(playerUUID);
+        }
+
+        ///     sohbet kanalı kontrolü
+        String ticketId = channelManager.getChannelOf(playerUUID);
+        if (ticketId != null) {
+            Set<Player> receivers = channelManager.getParticipants(ticketId).stream()
+                    .map(Bukkit::getPlayer)
+                    .filter(p -> p != null && p.isOnline())
+                    .collect(java.util.stream.Collectors.toSet());
+
+            event.getRecipients().clear();
+            event.getRecipients().addAll(receivers);
+
+            // Prefix ile mesajı biçimlendir (isteğe bağlı)
+            event.setFormat("§7[" + ticketId + "] §b" + player.getName() + "§f: " + event.getMessage());
         }
     }
 

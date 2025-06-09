@@ -14,6 +14,9 @@ commands:
   taleplerim:
     description: "yardım taleplerim"
     usage: /taleplerim
+  ticketchat:
+    description: "Ticket sohbetini açar"
+    usage: /ticketchat
 
 permissions:
   xanthhelp.adminhelp:
