@@ -4,7 +4,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import xanth.ogsammaenr.xanthHelp.command.*;
+import xanth.ogsammaenr.xanthHelp.command.AdminHelpCommand;
+import xanth.ogsammaenr.xanthHelp.command.HelpCommand;
+import xanth.ogsammaenr.xanthHelp.command.PlayerTicketsCommand;
 import xanth.ogsammaenr.xanthHelp.listener.ChatInputListener;
 import xanth.ogsammaenr.xanthHelp.listener.InventoryClickListener;
 import xanth.ogsammaenr.xanthHelp.manager.CategoryManager;
@@ -52,8 +54,6 @@ public final class XanthHelp extends JavaPlugin {
         chatInputListener = new ChatInputListener(this);
 
         getCommand("yardım").setExecutor(new HelpCommand(this));
-        getCommand("genelyardım").setExecutor(new GenelYardımCommand());
-        getCommand("teknikyardım").setExecutor(new TeknikYardımCommand());
         getCommand("adminyardım").setExecutor(new AdminHelpCommand());
         getCommand("taleplerim").setExecutor(new PlayerTicketsCommand());
 

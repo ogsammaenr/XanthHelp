@@ -61,6 +61,14 @@ public class TicketManager {
         }
     }
 
+    public void cancelTicket(String ticketId) throws SQLException {
+        Ticket ticket = getTicketById(ticketId);
+        if (ticket != null && ticket.getStatus() != TicketStatus.CANCELED) {
+            ticket.setStatus(TicketStatus.CANCELED);
+            ticketDAO.updateTicketStatus(ticketId, TicketStatus.CANCELED);
+        }
+    }
+
     public void resolveTicket(String ticketId) throws SQLException {
         Ticket ticket = ticketDAO.getTicketById(ticketId);
         if (ticket != null && (ticket.getStatus() == TicketStatus.IN_PROGRESS || ticket.getStatus() == TicketStatus.OPEN)) {

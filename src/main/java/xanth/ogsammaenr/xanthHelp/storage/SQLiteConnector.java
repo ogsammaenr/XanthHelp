@@ -58,9 +58,18 @@ public class SQLiteConnector implements DatabaseConnector {
                         resolved_at TEXT
                     );
                 """;
+        String createParticipantTableSQL = """
+                    CREATE TABLE IF NOT EXISTS ticket_participants (
+                        ticket_id TEXT NOT NULL,
+                        participant_uuid TEXT NOT NULL,
+                        PRIMARY KEY (ticket_id, participant_uuid),
+                        FOREIGN KEY (ticket_id) REFERENCES tickets(ticket_id) ON DELETE CASCADE
+                    );
+                """;
 
         try (Statement stmt = connection.createStatement()) {
             stmt.execute(createTableSQL);
+            stmt.execute(createParticipantTableSQL);
         }
     }
 }

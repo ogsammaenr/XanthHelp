@@ -48,7 +48,12 @@ public class TicketDAO {
             stmt.setString(1, ticketId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return mapResultSetToTicket(rs);
+                Ticket ticket = mapResultSetToTicket(rs);
+
+                // --- PARTICIPANTS LİSTESİNİ YÜKLE ---
+                ticket.setParticipants(getParticipantsByTicketId(ticket.getTicketId()));
+
+                return ticket;
             }
         }
         return null;
@@ -163,6 +168,7 @@ public class TicketDAO {
         }
     }
 
+    //  Belli bir durumdaki bütün ticketları döndürür
     public List<Ticket> getTicketsByStatus(TicketStatus status) throws SQLException {
         List<Ticket> tickets = new ArrayList<>();
 
@@ -178,6 +184,62 @@ public class TicketDAO {
         }
 
         return tickets;
+    }
+
+    //  izleyici ekler
+    public void addParticipant(String ticketId, UUID uuid) {
+        String sql = "INSERT OR IGNORE INTO ticket_participants (ticket_id, participant_uuid) VALUES (?, ?)";
+        try (PreparedStatement stmt = connector.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, ticketId);
+            stmt.setString(2, uuid.toString());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //  izleyici kaldırır
+    public void removeParticipant(String ticketId, UUID uuid) {
+        String sql = "DELETE FROM ticket_participants WHERE ticket_id = ? AND participant_uuid = ?";
+        try (PreparedStatement stmt = connector.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, ticketId);
+            stmt.setString(2, uuid.toString());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //  izleyicileri döndürür
+    public List<UUID> getParticipants(String ticketId) {
+        List<UUID> participants = new ArrayList<>();
+        String sql = "SELECT participant_uuid FROM ticket_participants WHERE ticket_id = ?";
+        try (PreparedStatement stmt = connector.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, ticketId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    participants.add(UUID.fromString(rs.getString("participant_uuid")));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return participants;
+    }
+
+    //  oyuncu o ticketta izleyici mi ?
+    public boolean isParticipant(String ticketId, UUID uuid) {
+        String sql = "SELECT 1 FROM ticket_participants WHERE ticket_id = ? AND participant_uuid = ?";
+        try (PreparedStatement stmt = connector.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, ticketId);
+            stmt.setString(2, uuid.toString());
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     // Son olarak ResultSet'ten Ticket nesnesine dönüştürme metodu
@@ -231,5 +293,19 @@ public class TicketDAO {
             }
         }
         return 1;
+    }
+
+    //  Ticketı izleyenlerı döndürür
+    private List<UUID> getParticipantsByTicketId(String ticketId) throws SQLException {
+        List<UUID> participants = new ArrayList<>();
+        String sql = "SELECT participant_uuid FROM ticket_participants WHERE ticket_id = ?";
+        try (PreparedStatement stmt = connector.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, ticketId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                participants.add(UUID.fromString(rs.getString("participant_uuid")));
+            }
+        }
+        return participants;
     }
 }

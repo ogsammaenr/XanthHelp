@@ -56,6 +56,11 @@ public class PlayerTicketsMenu {
             gui.setItem(i - start, item); // 0–44 slot arası
         }
 
+        gui.setItem(49, new ItemBuilder(Material.RED_CANDLE)
+                .setName("Menüye geri dön")
+                .setNBT("player_tickets_tab", "main_menu")
+                .build());
+
         // Sonraki sayfa
         if (tickets.size() > end) {
             gui.setItem(53, new ItemBuilder(Material.ARROW)
@@ -64,7 +69,7 @@ public class PlayerTicketsMenu {
                     .build());
         }
 
-        // Geri sayfa
+        // Önceki sayfa
         if (page > 0) {
             gui.setItem(45, new ItemBuilder(Material.ARROW)
                     .setName("§cÖnceki Sayfa")

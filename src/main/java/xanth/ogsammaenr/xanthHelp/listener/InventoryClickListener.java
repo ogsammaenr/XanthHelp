@@ -6,10 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import xanth.ogsammaenr.xanthHelp.XanthHelp;
-import xanth.ogsammaenr.xanthHelp.gui.AdminSupportMenu;
-import xanth.ogsammaenr.xanthHelp.gui.CategoryMenu;
-import xanth.ogsammaenr.xanthHelp.gui.PlayerTicketsMenu;
-import xanth.ogsammaenr.xanthHelp.gui.TicketDetailMenu;
+import xanth.ogsammaenr.xanthHelp.gui.*;
 import xanth.ogsammaenr.xanthHelp.manager.CategoryManager;
 import xanth.ogsammaenr.xanthHelp.manager.GuiConfigManager;
 import xanth.ogsammaenr.xanthHelp.manager.TicketManager;
@@ -53,6 +50,12 @@ public class InventoryClickListener implements Listener {
                 Player player = (Player) event.getWhoClicked();
 
                 new CategoryMenu(plugin).open(player, categoryTypeId);
+            }
+            String mytickets = Utils.getStringTag(clicked, "main_menu");
+            if (mytickets != null && mytickets.equals("myTickets")) {
+                Player player = (Player) event.getWhoClicked();
+
+                new PlayerTicketsMenu(plugin, 0).open(player);
             }
         }
 
@@ -147,7 +150,14 @@ public class InventoryClickListener implements Listener {
             String ticketId = parts[parts.length - 1];
 
             if (tab != null && tab.equals("previous_page")) {
-                new AdminSupportMenu(plugin, null, 0).open(player);
+                try {
+                    if (player.hasPermission(ticketManager.getTicketById(ticketId).getCategory().getType().getPermission()))
+                        new AdminSupportMenu(plugin, null, 0).open(player);
+                    else
+                        new PlayerTicketsMenu(plugin, 0).open(player);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             } else if (tab != null && tab.equals("accept")) {
                 try {
                     ticketManager.assignTicket(ticketId, player.getUniqueId());
@@ -161,6 +171,8 @@ public class InventoryClickListener implements Listener {
                 try {
                     ticketManager.unassignTicket(ticketId);
                     player.sendMessage("§eBu ticketla artık ilgilenmiyorsun");
+                    player.closeInventory();
+                    new AdminSupportMenu(plugin, null, 0).open(player);
                 } catch (SQLException e) {
                     player.sendMessage("§cSQL tabanlı bir hata oluştu");
                     throw new RuntimeException(e);
@@ -185,6 +197,9 @@ public class InventoryClickListener implements Listener {
                     break;
                 case "next_page":
                     new PlayerTicketsMenu(plugin, ++page).open(player);
+                    break;
+                case "main_menu":
+                    new MainMenu(plugin).open(player);
                     break;
                 default: {
                     if (tab.startsWith("TCK")) {

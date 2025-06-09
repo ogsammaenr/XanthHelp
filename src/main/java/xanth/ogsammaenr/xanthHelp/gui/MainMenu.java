@@ -23,7 +23,7 @@ public class MainMenu {
         int rows = plugin.getGuiConfigManager().getMainMenuRows();
         String title = plugin.getGuiConfigManager().getMainMenuTitle().replace("&", "§");
 
-        int playerTicketsSlot = 4 + rows * 9;
+        int playerTicketsSlot = 4 + (rows - 1) * 9;
         Inventory gui = Bukkit.createInventory(null, rows * 9, title);
 
         // Arka plan eşyalarını al ve doldur
@@ -39,7 +39,10 @@ public class MainMenu {
         for (GuiCategoryTypeItem item : typeItems.values()) {
             gui.setItem(item.getSlot(), item.toItemStack());
         }
-        gui.setItem(playerTicketsSlot, new ItemBuilder(Material.BOOK).setName("§fTaleplerim").build());
+        gui.setItem(playerTicketsSlot, new ItemBuilder(Material.BOOK)
+                .setName("§fTaleplerim")
+                .setNBT("main_menu", "myTickets")
+                .build());
 
         player.openInventory(gui);
     }
