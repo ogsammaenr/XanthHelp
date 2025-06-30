@@ -1,0 +1,4 @@
+name: XanthHelp
+version: '1.0-SNAPSHOT'
+main: xanth.ogsammaenr.xanthHelpDevelop.XanthHelp
+api-version: '1.21'
