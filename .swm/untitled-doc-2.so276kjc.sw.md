@@ -1,3 +1,13 @@
+---
+title: Untitled doc (2)
+---
+<SwmSnippet path="/src/main/java/xanth/ogsammaenr/xanthHelpDevelop/model/Ticket.java" line="1">
+
+---
+
+&nbsp;
+
+```java
 package xanth.ogsammaenr.xanthHelpDevelop.model;
 
 import java.time.LocalDateTime;
@@ -5,9 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * The type Ticket.
- */
 public class Ticket {
     private String ticketId;
 
@@ -30,130 +37,60 @@ public class Ticket {
 
     /* ==== GETTERS ==== */
 
-    /**
-     * Gets ticket ıd.
-     *
-     * @return the ticket ıd
-     */
     public String getTicketId() {
         return ticketId;
     }
 
-    /**
-     * Gets creator ıd.
-     *
-     * @return the creator ıd
-     */
     public UUID getCreatorId() {
         return creatorId;
     }
 
-    /**
-     * Gets status.
-     *
-     * @return the status
-     */
     public TicketStatus getStatus() {
         return status;
     }
 
-    /**
-     * Gets category.
-     *
-     * @return the category
-     */
     public TicketCategory getCategory() {
         return category;
     }
 
-    /**
-     * Gets description.
-     *
-     * @return the description
-     */
     public String getDescription() {
         return description;
     }
 
-    /**
-     * Gets creation date.
-     *
-     * @return the creation date
-     */
     public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    /**
-     * Gets staff ıd.
-     *
-     * @return the staff ıd
-     */
     public UUID getStaffId() {
         return staffId;
     }
 
-    /**
-     * Gets assignation date.
-     *
-     * @return the assignation date
-     */
     public LocalDateTime getAssignationDate() {
         return assignationDate;
     }
 
-    /**
-     * Gets resolve date.
-     *
-     * @return the resolve date
-     */
     public LocalDateTime getResolveDate() {
         return resolveDate;
     }
 
-    /**
-     * Gets participants.
-     *
-     * @return the participants
-     */
     public List<UUID> getParticipants() {
         return participants;
     }
 
-    /**
-     * Gets active participants.
-     *
-     * @return the active participants
-     */
     public List<UUID> getActiveParticipants() {
         return activeParticipants;
     }
 
     /* ==== SETTERS & HELPERS ==== */
 
-    /**
-     * Sets participants.
-     *
-     * @param participants the participants
-     */
     public void setParticipants(List<UUID> participants) {
         this.participants = participants;
     }
 
-    /**
-     * Sets active participants.
-     *
-     * @param activeParticipants the active participants
-     */
     public void setActiveParticipants(List<UUID> activeParticipants) {
         this.activeParticipants = activeParticipants;
     }
 
-    /**
-     * Add participant.
-     *
-     * @param uuid the uuid
-     */
     public void addParticipant(UUID uuid) {
         if (this.participants == null) {
             this.participants = new ArrayList<>();
@@ -163,11 +100,6 @@ public class Ticket {
         }
     }
 
-    /**
-     * Add active participant.
-     *
-     * @param uuid the uuid
-     */
     public void addActiveParticipant(UUID uuid) {
         if (this.activeParticipants == null) {
             this.activeParticipants = new ArrayList<>();
@@ -177,22 +109,12 @@ public class Ticket {
         }
     }
 
-    /**
-     * Remove participant.
-     *
-     * @param uuid the uuid
-     */
     public void removeParticipant(UUID uuid) {
         if (this.participants != null) {
             this.participants.remove(uuid);
         }
     }
 
-    /**
-     * Remove active participant.
-     *
-     * @param uuid the uuid
-     */
     public void removeActiveParticipant(UUID uuid) {
         if (this.activeParticipants != null) {
             this.activeParticipants.remove(uuid);
@@ -201,9 +123,6 @@ public class Ticket {
 
     // === BUILDER ===
 
-    /**
-     * The type Builder.
-     */
     public static class Builder {
         private final String ticketId;
 
@@ -220,16 +139,6 @@ public class Ticket {
         private List<UUID> participants;
         private List<UUID> activeParticipants;
 
-        /**
-         * Instantiates a new Builder.
-         *
-         * @param ticketId     the ticket ıd
-         * @param creatorId    the creator ıd
-         * @param status       the status
-         * @param category     the category
-         * @param description  the description
-         * @param creationDate the creation date
-         */
         public Builder(String ticketId, UUID creatorId, TicketStatus status, TicketCategory category,
                        String description, LocalDateTime creationDate) {
             this.ticketId = ticketId;
@@ -240,66 +149,31 @@ public class Ticket {
             this.creationDate = creationDate;
         }
 
-        /**
-         * Sets staff ıd.
-         *
-         * @param staffId the staff ıd
-         * @return the staff ıd
-         */
         public Builder setStaffId(UUID staffId) {
             this.staffId = staffId;
             return this;
         }
 
-        /**
-         * Sets assignation date.
-         *
-         * @param assignationDate the assignation date
-         * @return the assignation date
-         */
         public Builder setAssignationDate(LocalDateTime assignationDate) {
             this.assignationDate = assignationDate;
             return this;
         }
 
-        /**
-         * Sets resolve date.
-         *
-         * @param resolveDate the resolve date
-         * @return the resolve date
-         */
         public Builder setResolveDate(LocalDateTime resolveDate) {
             this.resolveDate = resolveDate;
             return this;
         }
 
-        /**
-         * Sets participants.
-         *
-         * @param participants the participants
-         * @return the participants
-         */
         public Builder setParticipants(List<UUID> participants) {
             this.participants = participants;
             return this;
         }
 
-        /**
-         * Sets active participants.
-         *
-         * @param activeParticipants the active participants
-         * @return the active participants
-         */
         public Builder setActiveParticipants(List<UUID> activeParticipants) {
             this.activeParticipants = activeParticipants;
             return this;
         }
 
-        /**
-         * Build ticket.
-         *
-         * @return the ticket
-         */
         public Ticket build() {
             Ticket ticket = new Ticket();
 
@@ -319,3 +193,11 @@ public class Ticket {
         }
     }
 }
+
+```
+
+---
+
+</SwmSnippet>
+
+<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBWGFudGhIZWxwJTNBJTNBb2dzYW1tYWVucg==" repo-name="XanthHelp"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>
