@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+
 public class TicketManager {
     private final TicketDAO ticketDAO;
     private final Map<String, Ticket> tickets = new ConcurrentHashMap<>();

@@ -1,0 +1,60 @@
+# categories.yml
+# Kategori türlerini (TicketCategoryType) ve kategorileri (TicketCategory) tanımlar.
+
+category-types:
+  REPORT:
+    display-name: "&cOyuncu Bildirim"
+    permission: "xanthhelp.category.report"
+    icon: BARRIER
+    lore:
+      - "&7Oyuncuları Bildirmek için bu tipi seç"
+      - "&7Bütün yetkililer erişebilir"
+
+  GENERAL:
+    display-name: "&aGenel Sorunlar"
+    permission: "xanthhelp.category.general"
+    icon: DIAMOND
+    lore:
+      - "&7Sunucudaki genel sorunlar için bu tipi seç"
+      - "&7Desteklerin ilgilenebileceği ticketlar"
+
+  TECHNIC:
+    display-name: "&eTeknik Sorunlar"
+    permission: "xanthhelp.category.technic"
+    icon: PAPER
+    lore:
+      - "&7Teknik sorunlar için bu tipten bir ticket oluşturmalısın"
+      - "&7Sadece Üst Düzey Yetkililerin Erişebilir"
+
+categories:
+  bug-report:
+    display-name: "&eHata Bildirimi"
+    type: TECHNIC
+    icon: "COBWEB"
+    lore:
+      - "&7Bir sistem hatasını bildir"
+      - "&7Lütfen tekrar üretmek için adımları yaz."
+
+  feature-request:
+    display-name: "&bÖzellik Talebi"
+    type: TECHNIC
+    icon: "BOOK"
+    lore:
+      - "&7Yeni bir özellik önerin"
+      - "&7Sunucuda görmek istediğiniz şey nedir?"
+
+  payment-issue:
+    display-name: "&6Ödeme Sorunu"
+    type: GENERAL
+    icon: "GOLD_INGOT"
+    lore:
+      - "&7Satın alımlar veya ödemelerle ilgili problemler"
+      - "&7Sipariş numaranızı belirtin."
+
+  hacking:
+    display-name: "&cBildirim İşlemi"
+    type: REPORT
+    icon: "IRON_SWORD"
+    lore:
+      - "&7Yetkililer için moderasyon sorunları"
+      - "&7Mute, ban, itirazlar vb."
