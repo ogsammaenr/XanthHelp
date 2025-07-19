@@ -4,7 +4,7 @@
 category-types:
   REPORT:
     display-name: "&cOyuncu Bildirim"
-    permission: "xanthhelp.category.report"
+    permission: "report"
     icon: BARRIER
     lore:
       - "&7Oyuncuları Bildirmek için bu tipi seç"
@@ -12,7 +12,7 @@ category-types:
 
   GENERAL:
     display-name: "&aGenel Sorunlar"
-    permission: "xanthhelp.category.general"
+    permission: "general"
     icon: DIAMOND
     lore:
       - "&7Sunucudaki genel sorunlar için bu tipi seç"
@@ -20,7 +20,7 @@ category-types:
 
   TECHNIC:
     display-name: "&eTeknik Sorunlar"
-    permission: "xanthhelp.category.technic"
+    permission: "technic"
     icon: PAPER
     lore:
       - "&7Teknik sorunlar için bu tipten bir ticket oluşturmalısın"

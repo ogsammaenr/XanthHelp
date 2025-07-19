@@ -26,7 +26,6 @@ public final class XanthHelp extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        // Veritabanı dosyasının yolu
         File dataFolder = getDataFolder();
         if (!dataFolder.exists()) dataFolder.mkdirs();
         File dbFile = new File(dataFolder, "tickets.db");
@@ -34,16 +33,16 @@ public final class XanthHelp extends JavaPlugin {
         File categoryFile = new File(dataFolder, "categories.yml");
         FileConfiguration categories = new YamlConfiguration().loadConfiguration(categoryFile);
 
-        // Veritabanı bağlantısını oluştur
         this.databaseConnector = new SQLiteConnector(dbFile.getAbsolutePath());
-
-        // DAO ve Manager sınıflarını başlat
         this.ticketDAO = new SQLiteTicketDAO(databaseConnector);
+
+
         this.ticketManager = new TicketManager(ticketDAO);
         this.ticketCategoryManager = new TicketCategoryManager(this);
         this.categoryLoader = new CategoryLoader(categories, this);
 
-        // Komutlar, EventListener'lar burada kaydedilir (ileride eklenecek)
+        categoryLoader.loadAll();
+
 
         getLogger().info("******* XanthHelp Enabled *******");
     }
@@ -51,6 +50,12 @@ public final class XanthHelp extends JavaPlugin {
     @Override
     public void onDisable() {
         getLogger().info("******* XanthHelp Disabled *******");
+    }
+
+    /* ===== GETTERS ===== */
+
+    public TicketManager getTicketManager() {
+        return ticketManager;
     }
 
     public TicketCategoryManager getTicketCategoryManager() {

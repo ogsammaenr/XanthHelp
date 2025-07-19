@@ -1,8 +1,12 @@
 package xanth.ogsammaenr.xanthHelpDevelop.storage;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.PluginManager;
 import xanth.ogsammaenr.xanthHelpDevelop.XanthHelp;
 import xanth.ogsammaenr.xanthHelpDevelop.manager.TicketCategoryManager;
 import xanth.ogsammaenr.xanthHelpDevelop.model.TicketCategory;
@@ -23,6 +27,13 @@ public class CategoryLoader {
 
     public void loadAll() {
         categoryManager.clear();
+
+        PluginManager pm = Bukkit.getPluginManager();
+        for (Permission perm : pm.getPermissions()) {
+            if (perm.getName().startsWith("xanthhelp.category")) {
+                pm.removePermission(perm);
+            }
+        }
 
         loadCategoryTypes();
         loadCategories();
@@ -60,13 +71,21 @@ public class CategoryLoader {
                 plugin.getLogger().warning("Category '" + id + "' is missing permission.");
                 continue;
             }
+            String fullPermission = "xanthhelp.category." + permission;
+            PluginManager pm = Bukkit.getPluginManager();
+            if (pm.getPermission(permission) == null) {
+                String description = "Allows access to category type: " + id;
+                Permission perm = new Permission(fullPermission, description, PermissionDefault.OP);
+                pm.addPermission(perm);
+            }
+
             List<String> lore = typeSection.getStringList("lore");
             if (lore.isEmpty()) {
                 plugin.getLogger().warning("Category '" + id + "' is missing lore.");
                 continue;
             }
 
-            TicketCategoryType type = new TicketCategoryType(id, displayName, permission, lore, icon);
+            TicketCategoryType type = new TicketCategoryType(id, displayName, fullPermission, lore, icon);
 
             categoryManager.addCategoryType(type);
         }
