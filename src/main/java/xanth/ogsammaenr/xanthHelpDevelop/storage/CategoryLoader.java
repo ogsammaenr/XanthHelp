@@ -14,17 +14,29 @@ import xanth.ogsammaenr.xanthHelpDevelop.model.TicketCategoryType;
 
 import java.util.List;
 
+/**
+ * The type Category loader.
+ */
 public class CategoryLoader {
     private final FileConfiguration config;
     private final TicketCategoryManager categoryManager;
     private final XanthHelp plugin;
 
+    /**
+     * Instantiates a new Category loader.
+     *
+     * @param config the config
+     * @param plugin the plugin
+     */
     public CategoryLoader(FileConfiguration config, XanthHelp plugin) {
         this.config = config;
         this.plugin = plugin;
         this.categoryManager = plugin.getTicketCategoryManager();
     }
 
+    /**
+     * Clear all and Load all.
+     */
     public void loadAll() {
         categoryManager.clear();
 
@@ -40,6 +52,9 @@ public class CategoryLoader {
     }
 
 
+    /**
+     * Load category types from categories.yml file.
+     */
     public void loadCategoryTypes() {
         ConfigurationSection section = config.getConfigurationSection("category-types");
         if (section == null) {
@@ -92,6 +107,9 @@ public class CategoryLoader {
 
     }
 
+    /**
+     * Load categories from categories.yml file.
+     */
     public void loadCategories() {
         ConfigurationSection section = config.getConfigurationSection("categories");
         if (section == null) {

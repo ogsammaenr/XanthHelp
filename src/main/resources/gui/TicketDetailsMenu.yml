@@ -1,0 +1,85 @@
+title: "&eTicket Details"
+rows: 6
+
+fillers:
+  general:
+    enabled: true
+    material: BLACK_STAINED_GLASS_PANE
+    name: " "
+  top-row:
+    enabled: true
+    material: GRAY_STAINED_GLASS_PANE
+    name: " "
+  bottom-row:
+    enabled: true
+    material: GRAY_STAINED_GLASS_PANE
+    name: " "
+
+details:
+  id: "Ticket Id : %id%"
+  owner-name: "Name : %player-name%"
+  status: "Status : %status%"
+  category: "Category : %category%"
+  description: "Description : %description%"
+  creation-date: "Creation Date : %creation-date%"
+  staff-name: "Staff Name : %staff-name%"
+  assignation-date: "Assignation date : %assignation-date%"
+  resolve-date: "Resolve Date : %resolve-date%"
+  participants: "Participants : %participants%"
+
+buttons:
+
+  claim:
+    material: NAME_TAG
+    name: "&aTicketı Sahiplen"
+    lore:
+      - "&7Bu ticketı üzerinize alın."
+      - "&8[Yetkililer için görünür]"
+
+  mark-as-resolved:
+    material: GREEN_WOOL
+    name: "&aÇözüldü Olarak İşaretle"
+    lore:
+      - "&7Ticketı çözüldü olarak işaretlemek için tıkla."
+
+  join-participants:
+    material: PLAYER_HEAD
+    name: "&aKatıl"
+    lore:
+      - "&7Bu ticketın çözümüne katkı sağlamak için katıl."
+      - "&8[Yalnızca yetkililer için]"
+
+  leave-participants:
+    material: BARRIER
+    name: "&cAyrıl"
+    lore:
+      - "&7Bu ticketın çözümünden ayrılmak için tıkla."
+      - "&8[Yalnızca katılımcılar için]"
+
+  unclaim:
+    material: PAPER
+    name: "&eSahipliği Bırak"
+    lore:
+      - "&7Ticket üzerindeki sahipliği bırakmak için tıkla."
+      - "&8[Yalnızca ticket sahibi yetkililer için]"
+
+  cancel-ticket:
+    material: REDSTONE_BLOCK
+    name: "&cTicketı İptal Et"
+    lore:
+      - "&7Bu ticketı iptal etmek için tıkla."
+
+  ping-staff:
+    enabled:
+      material: BELL
+      name: "&eYetkililere Bildir"
+      lore:
+        - "&7Bir yetkili henüz bu ticketı almadı."
+        - "&aTıklayarak yetkililere ping atabilirsin."
+
+    cooldown:
+      material: CLOCK
+      name: "&6Bekleme Süresi"
+      lore:
+        - "&7Ping atmak için biraz beklemelisin."
+        - "&fKalan süre: &e%cooldown%s"

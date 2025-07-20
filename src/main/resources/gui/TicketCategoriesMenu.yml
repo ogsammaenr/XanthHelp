@@ -1,0 +1,30 @@
+title: "&eTicket Kategorileri"
+rows: 6
+
+fillers:
+  general:
+    enabled: true
+    material: BLACK_STAINED_GLASS_PANE
+    name: " "
+  top-row:
+    enabled: true
+    material: GRAY_STAINED_GLASS_PANE
+    name: " "
+  bottom-row:
+    enabled: true
+    material: GRAY_STAINED_GLASS_PANE
+    name: " "
+
+categories:
+  technic:
+    bug_report: 10
+    performance_issue: 11
+    crash: 12
+
+  gameplay:
+    feature_request: 10
+    balance_issue: 12
+
+  support:
+    account_help: 10
+    payment_issue: 12

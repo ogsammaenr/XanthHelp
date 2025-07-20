@@ -1,9 +1,18 @@
+---
+title: Untitled doc (3)
+---
+<SwmSnippet path="/src/main/java/xanth/ogsammaenr/xanthHelpDevelop/XanthHelp.java" line="1">
+
+---
+
+&nbsp;
+
+```java
 package xanth.ogsammaenr.xanthHelpDevelop;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import xanth.ogsammaenr.xanthHelpDevelop.manager.GuiConfigManager;
 import xanth.ogsammaenr.xanthHelpDevelop.manager.TicketCategoryManager;
 import xanth.ogsammaenr.xanthHelpDevelop.manager.TicketManager;
 import xanth.ogsammaenr.xanthHelpDevelop.storage.CategoryLoader;
@@ -22,7 +31,6 @@ public final class XanthHelp extends JavaPlugin {
     private TicketManager ticketManager;
     private TicketCategoryManager ticketCategoryManager;
     private CategoryLoader categoryLoader;
-    private GuiConfigManager guiConfigManager;
 
     @Override
     public void onEnable() {
@@ -42,8 +50,6 @@ public final class XanthHelp extends JavaPlugin {
         this.ticketManager = new TicketManager(ticketDAO);
         this.ticketCategoryManager = new TicketCategoryManager(this);
         this.categoryLoader = new CategoryLoader(categories, this);
-
-        this.guiConfigManager = new GuiConfigManager(this);
 
         categoryLoader.loadAll();
 
@@ -70,12 +76,16 @@ public final class XanthHelp extends JavaPlugin {
         return categoryLoader;
     }
 
-    public GuiConfigManager getGuiConfigManager() {
-        return guiConfigManager;
-    }
-
     public static XanthHelp getInstance() {
         return instance;
     }
 
 }
+
+```
+
+---
+
+</SwmSnippet>
+
+<SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBWGFudGhIZWxwJTNBJTNBb2dzYW1tYWVucg==" repo-name="XanthHelp"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>

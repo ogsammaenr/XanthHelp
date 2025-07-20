@@ -70,7 +70,7 @@ public class TicketManager {
     /**
      * Add a participant to a ticket and persist change.
      */
-    public void addParticipant(String ticketId, java.util.UUID participant) {
+    public void addParticipant(String ticketId, UUID participant) {
         getTicket(ticketId).ifPresent(ticket -> {
             ticket.addParticipant(participant);
             updateTicket(ticket);
@@ -80,7 +80,7 @@ public class TicketManager {
     /**
      * Add an active participant and persist if needed.
      */
-    public void addActiveParticipant(String ticketId, java.util.UUID participant) {
+    public void addActiveParticipant(String ticketId, UUID participant) {
         getTicket(ticketId).ifPresent(ticket -> {
             ticket.addActiveParticipant(participant);
             updateTicket(ticket);
@@ -90,7 +90,7 @@ public class TicketManager {
     /**
      * Remove an active participant.
      */
-    public void removeActiveParticipant(String ticketId, java.util.UUID participant) {
+    public void removeActiveParticipant(String ticketId, UUID participant) {
         getTicket(ticketId).ifPresent(ticket -> {
             ticket.removeActiveParticipant(participant);
             updateTicket(ticket);
@@ -98,7 +98,9 @@ public class TicketManager {
     }
 
     /*
-     * ===== Status-based getters =====
+     * +-------------------------------+
+     * |     Status-based getters      |
+     * +-------------------------------+
      */
 
     /**
@@ -138,7 +140,9 @@ public class TicketManager {
     }
 
     /*
-     * ===== Player-based getters =====
+     * +------------------------------+
+     * |     Player-based getters     |
+     * +------------------------------+
      */
 
     /**
