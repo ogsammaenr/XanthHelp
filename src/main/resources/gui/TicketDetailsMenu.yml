@@ -69,17 +69,16 @@ buttons:
     lore:
       - "&7Bu ticketı iptal etmek için tıkla."
 
-  ping-staff:
-    enabled:
-      material: BELL
-      name: "&eYetkililere Bildir"
-      lore:
-        - "&7Bir yetkili henüz bu ticketı almadı."
-        - "&aTıklayarak yetkililere ping atabilirsin."
+  ping-staff-enabled:
+    material: BELL
+    name: "&eYetkililere Bildir"
+    lore:
+      - "&7Bir yetkili henüz bu ticketı almadı."
+      - "&aTıklayarak yetkililere ping atabilirsin."
 
-    cooldown:
-      material: CLOCK
-      name: "&6Bekleme Süresi"
-      lore:
-        - "&7Ping atmak için biraz beklemelisin."
-        - "&fKalan süre: &e%cooldown%s"
+  ping-staff-cooldown:
+    material: CLOCK
+    name: "&6Bekleme Süresi"
+    lore:
+      - "&7Ping atmak için biraz beklemelisin."
+      - "&fKalan süre: &e%cooldown%s"

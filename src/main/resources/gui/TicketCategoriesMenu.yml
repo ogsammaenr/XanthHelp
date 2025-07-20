@@ -16,15 +16,12 @@ fillers:
     name: " "
 
 categories:
-  technic:
+  TECHNIC:
     bug_report: 10
-    performance_issue: 11
-    crash: 12
+    feature-request: 11
 
-  gameplay:
-    feature_request: 10
-    balance_issue: 12
+  GENERAL:
+    payment-issue: 10
 
-  support:
-    account_help: 10
-    payment_issue: 12
+  REPORT:
+    hacking: 10

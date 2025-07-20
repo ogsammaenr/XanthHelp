@@ -22,38 +22,53 @@ buttons:
     slot: 53
     name: "next"
     material: ARROW
-
+    lore:
+      - "next"
   previous:
     slot: 45
     name: "previous"
     material: ARROW
+    lore:
+      - "previous"
 
   player-filter-button:
     slot: 4
     name: "search player"
     material: OAK_SIGN
+    lore:
+      - "player filter"
 
-  open:
+  OPEN:
     slot: 47
     name: "Open"
     material: GRAY_CONCRETE
+    lore:
+      - "open"
 
-  in_progress:
+  IN_PROGRESS:
     slot: 48
     name: "In Progress"
     material: YELLOW_CONCRETE
+    lore:
+      - "In Progress"
 
-  cancelled:
+  CANCELED:
     slot: 49
-    name: "Cancelled"
+    name: "Canceled"
     material: RED_CONCRETE
+    lore:
+      - "cancelled"
 
-  resolved:
+  RESOLVED:
     slot: 50
     name: "Resolved"
     material: GREEN_CONCRETE
+    lore:
+      - "resolved"
 
-  all:
+  ALL:
     slot: 51
     name: "All"
     material: LIME_CONCRETE
+    lore:
+      - "all"

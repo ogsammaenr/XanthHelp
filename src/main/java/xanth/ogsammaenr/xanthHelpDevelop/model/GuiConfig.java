@@ -235,12 +235,18 @@ public class GuiConfig {
         private int[] ticketButtons;
 
         private ItemStack next, previous, playerFilterButton, open, inProgress, cancelled, resolved, all;
+        private int nextSlot, previousSlot, playerFilterButtonSlot, openSlot, inProgressSlot, cancelledSlot,
+                resolvedSlot, allSlot;
 
         public TicketsMenuConfig(String title, int rows, FillerSettings fillerSettings
                 , int[] ticketButtons, ItemStack next, ItemStack previous
                 , ItemStack playerFilterButton, ItemStack open
                 , ItemStack inProgress, ItemStack cancelled
-                , ItemStack resolved, ItemStack all) {
+                , ItemStack resolved, ItemStack all
+                , int nextSlot, int previousSlot
+                , int playerFilterButtonSlot, int openSlot
+                , int inProgressSlot, int cancelledSlot
+                , int resolvedSlot, int allSlot) {
             this.title = title;
             this.rows = rows;
             this.fillerSettings = fillerSettings;
@@ -253,6 +259,14 @@ public class GuiConfig {
             this.cancelled = cancelled;
             this.resolved = resolved;
             this.all = all;
+            this.nextSlot = nextSlot;
+            this.previousSlot = previousSlot;
+            this.playerFilterButtonSlot = playerFilterButtonSlot;
+            this.openSlot = openSlot;
+            this.inProgressSlot = inProgressSlot;
+            this.cancelledSlot = cancelledSlot;
+            this.resolvedSlot = resolvedSlot;
+            this.allSlot = allSlot;
         }
 
         public String getTitle() {
@@ -301,6 +315,38 @@ public class GuiConfig {
 
         public ItemStack getResolved() {
             return resolved;
+        }
+
+        public int getAllSlot() {
+            return allSlot;
+        }
+
+        public int getCancelledSlot() {
+            return cancelledSlot;
+        }
+
+        public int getInProgressSlot() {
+            return inProgressSlot;
+        }
+
+        public int getNextSlot() {
+            return nextSlot;
+        }
+
+        public int getOpenSlot() {
+            return openSlot;
+        }
+
+        public int getPlayerFilterButtonSlot() {
+            return playerFilterButtonSlot;
+        }
+
+        public int getPreviousSlot() {
+            return previousSlot;
+        }
+
+        public int getResolvedSlot() {
+            return resolvedSlot;
         }
     }
 
