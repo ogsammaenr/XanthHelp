@@ -4,7 +4,7 @@ rows: 5
 fillers:
   general:
     enabled: true
-    material: BLACK_STAINED_GLASS_PANE
+    material: LIGHT_GRAY_STAINED_GLASS_PANE
     name: " "
   top-row:
     enabled: true
@@ -17,8 +17,14 @@ fillers:
 
 confirmations-menu:
   accept:
+    slot: 24
     material: LIME_DYE
     name: "&aKabul Et"
+    lore:
+      - "&1Kabul Et"
   deny:
+    slot: 20
     material: RED_DYE
     name: "&cRed et"
+    lore:
+      - "&4Red Et"

@@ -4,7 +4,7 @@ rows: 5
 fillers:
   general:
     enabled: true
-    material: BLACK_STAINED_GLASS_PANE
+    material: LIGHT_GRAY_STAINED_GLASS_PANE
     name: " "
   top-row:
     enabled: true
@@ -16,6 +16,6 @@ fillers:
     name: " "
 
 category-types:
-  REPORT: 10
-  GENERAL: 12
-  TECHNIC: 14
+  REPORT: 20
+  GENERAL: 22
+  TECHNIC: 24

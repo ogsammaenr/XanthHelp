@@ -1,7 +1,8 @@
 package xanth.ogsammaenr.xanthHelpDevelop.storage;
 
+import xanth.ogsammaenr.xanthHelpDevelop.XanthHelp;
+import xanth.ogsammaenr.xanthHelpDevelop.manager.TicketCategoryManager;
 import xanth.ogsammaenr.xanthHelpDevelop.model.Ticket;
-import xanth.ogsammaenr.xanthHelpDevelop.model.TicketCategory;
 import xanth.ogsammaenr.xanthHelpDevelop.model.TicketStatus;
 
 import java.sql.*;
@@ -21,6 +22,8 @@ import java.util.UUID;
  */
 public class SQLiteTicketDAO implements TicketDAO {
     private final SQLiteConnector connector;
+    private final XanthHelp plugin;
+    private final TicketCategoryManager catManager;
 
     /**
      * Constructs a new SQLiteTicketDAO with the given connector.
@@ -30,6 +33,8 @@ public class SQLiteTicketDAO implements TicketDAO {
      */
     public SQLiteTicketDAO(SQLiteConnector connector) {
         this.connector = connector;
+        this.plugin = XanthHelp.getInstance();
+        this.catManager = plugin.getTicketCategoryManager();
         createTableIfNotExists();
     }
 
@@ -124,8 +129,9 @@ public class SQLiteTicketDAO implements TicketDAO {
      */
     @Override
     public void insert(Ticket ticket) {
-        String sql = "INSERT INTO tickets(ticket_id, creator_id, status, category_id, description, creation_date, staff_id, assignation_date, resolve_date) "
-                     + "VALUES(?,?,?,?,?,?,?,?,?)";
+        String sql =
+                "INSERT INTO tickets(ticket_id, creator_id, status, category_id, description, creation_date, staff_id, assignation_date, resolve_date) "
+                + "VALUES(?,?,?,?,?,?,?,?,?)";
         try (Connection conn = connector.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, ticket.getTicketId());
@@ -152,7 +158,8 @@ public class SQLiteTicketDAO implements TicketDAO {
      */
     @Override
     public void update(Ticket ticket) {
-        String sql = "UPDATE tickets SET creator_id=?, status=?, category_id=?, description=?, creation_date=?, staff_id=?, assignation_date=?, resolve_date=? WHERE ticket_id=?";
+        String sql =
+                "UPDATE tickets SET creator_id=?, status=?, category_id=?, description=?, creation_date=?, staff_id=?, assignation_date=?, resolve_date=? WHERE ticket_id=?";
         try (Connection conn = connector.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, ticket.getCreatorId().toString());
@@ -202,7 +209,7 @@ public class SQLiteTicketDAO implements TicketDAO {
                 rs.getString("ticket_id"),
                 UUID.fromString(rs.getString("creator_id")),
                 TicketStatus.valueOf(rs.getString("status")),
-                new TicketCategory(rs.getString("category_id"), null, null, null, null), // placeholder category
+                catManager.getCategoryById(rs.getString("category_id")),
                 rs.getString("description"),
                 LocalDateTime.parse(rs.getString("creation_date"))
         )

@@ -1,5 +1,6 @@
 package xanth.ogsammaenr.xanthHelpDevelop.storage;
 
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -12,6 +13,7 @@ import xanth.ogsammaenr.xanthHelpDevelop.manager.TicketCategoryManager;
 import xanth.ogsammaenr.xanthHelpDevelop.model.TicketCategory;
 import xanth.ogsammaenr.xanthHelpDevelop.model.TicketCategoryType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,6 +40,8 @@ public class CategoryLoader {
      * Clear all and Load all.
      */
     public void loadAll() {
+        plugin.saveResource("categories.yml", false);
+
         categoryManager.clear();
 
         PluginManager pm = Bukkit.getPluginManager();
@@ -48,6 +52,7 @@ public class CategoryLoader {
         }
 
         loadCategoryTypes();
+
         loadCategories();
     }
 
@@ -66,7 +71,7 @@ public class CategoryLoader {
             ConfigurationSection typeSection = section.getConfigurationSection(id);
             if (typeSection == null) continue;
 
-            String displayName = typeSection.getString("display-name");
+            String displayName = ChatColor.translateAlternateColorCodes('&', typeSection.getString("display-name"));
             if (displayName == null) {
                 plugin.getLogger().warning("Category '" + id + "' is missing display-name.");
                 continue;
@@ -92,16 +97,24 @@ public class CategoryLoader {
                 String description = "Allows access to category type: " + id;
                 Permission perm = new Permission(fullPermission, description, PermissionDefault.OP);
                 pm.addPermission(perm);
+            } else {
+                plugin.getLogger().warning("Permission '" + fullPermission + "' already exists.");
             }
 
-            List<String> lore = typeSection.getStringList("lore");
-            if (lore.isEmpty()) {
+            List<String> rawLore = typeSection.getStringList("lore");
+            if (rawLore.isEmpty()) {
                 plugin.getLogger().warning("Category '" + id + "' is missing lore.");
                 continue;
             }
 
+            List<String> lore = new ArrayList<>();
+            for (String line : rawLore) {
+                lore.add(ChatColor.translateAlternateColorCodes('&', line));
+            }
+
             TicketCategoryType type = new TicketCategoryType(id, displayName, fullPermission, lore, icon);
 
+            plugin.getLogger().info(id + "CategoryType Loaded. \n " + type.toString() + "\n");
             categoryManager.addCategoryType(type);
         }
 
@@ -122,11 +135,12 @@ public class CategoryLoader {
             if (categorySection == null) continue;
 
             // DisplayName
-            String displayName = categorySection.getString("display-name");
-            if (displayName == null) {
+            String rawDisplayName = categorySection.getString("display-name");
+            if (rawDisplayName == null) {
                 plugin.getLogger().warning("Category '" + id + "' is missing display-name.");
                 continue;
             }
+            String displayName = ChatColor.translateAlternateColorCodes('&', rawDisplayName);
             // IconStr
             String iconStr = categorySection.getString("icon");
             if (iconStr == null) {
@@ -152,13 +166,19 @@ public class CategoryLoader {
                 continue;
             }
             // Lore
-            List<String> lore = categorySection.getStringList("lore");
-            if (lore.isEmpty()) {
+            List<String> rawLore = categorySection.getStringList("lore");
+            if (rawLore.isEmpty()) {
                 plugin.getLogger().warning("Category '" + id + "' is missing lore.");
                 continue;
             }
+            List<String> lore = new ArrayList<>();
+            for (String line : rawLore) {
+                lore.add(ChatColor.translateAlternateColorCodes('&', line));
+            }
 
             TicketCategory category = new TicketCategory(id, displayName, lore, categoryType, icon);
+
+            plugin.getLogger().info(id + "Category Loaded. \n " + category.toString());
 
             categoryManager.addCategory(category);
         }

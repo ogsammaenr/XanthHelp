@@ -1,5 +1,6 @@
 package xanth.ogsammaenr.xanthHelpDevelop.storage;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -13,6 +14,7 @@ import xanth.ogsammaenr.xanthHelpDevelop.model.TicketCategoryType;
 import xanth.ogsammaenr.xanthHelpDevelop.util.ItemBuilder;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,7 +74,7 @@ public class GuiConfigLoader {
     }
 
     private GuiConfig.ConfirmationMenuConfig loadConfirmationMenu() {
-        String title = confirmationMenuConfig.getString("title");
+        String title = ChatColor.translateAlternateColorCodes('&', confirmationMenuConfig.getString("title"));
         int rows = confirmationMenuConfig.getInt("rows");
         if (rows < 1 || rows > 6) {
             throw new IllegalArgumentException("Invalid row count in 'ConfirmationMenu.yml': " + rows + ". Must be between 1 and 6.");
@@ -81,26 +83,20 @@ public class GuiConfigLoader {
         GuiConfig.FillerSettings fillers = getFillerSettingsFromSection(fillersSection);
 
         ConfigurationSection configSection = confirmationMenuConfig.getConfigurationSection("confirmations-menu");
-        Material acceptMat = Material.getMaterial(configSection.getString("accept.material"));
-        if (acceptMat == null) {
-            throw new IllegalArgumentException("Invalid material for accept button in 'ConfirmationMenu.yml'");
-        }
-        String acceptName = configSection.getString("accept.name");
-        ItemStack acceptItem = new ItemBuilder(acceptMat).setName(acceptName).build();
 
-        Material denyMat = Material.getMaterial(configSection.getString("deny.material"));
-        if (acceptMat == null) {
-            throw new IllegalArgumentException("Invalid material for deny button in 'ConfirmationMenu.yml'");
-        }
-        String denyName = configSection.getString("deny.name");
-        ItemStack denyItem = new ItemBuilder(denyMat).setName(denyName).build();
+        ItemStack acceptItem = getItemStackFromSection(configSection.getConfigurationSection("accept"));
+        int acceptSlot = configSection.getInt("accept.slot");
 
-        return new GuiConfig.ConfirmationMenuConfig(title, rows, fillers, denyItem, acceptItem);
+        ItemStack denyItem = getItemStackFromSection(configSection.getConfigurationSection("deny"));
+        int denySlot = configSection.getInt("deny.slot");
+
+        plugin.getLogger().info("Confirmation Menu Loaded");
+        return new GuiConfig.ConfirmationMenuConfig(title, rows, fillers, denyItem, denySlot, acceptItem, acceptSlot);
 
     }
 
     private GuiConfig.MainMenuConfig loadMainMenu() {
-        String title = mainMenuConfig.getString("title");
+        String title = ChatColor.translateAlternateColorCodes('&', mainMenuConfig.getString("title"));
         int rows = mainMenuConfig.getInt("rows");
         if (rows <= 0 || rows > 6) {
             throw new IllegalArgumentException("Invalid row count in 'MainMenu.yml': " + rows + ". Must be between 1 and 6.");
@@ -118,12 +114,14 @@ public class GuiConfigLoader {
                 plugin.getLogger().warning("Unknown category type " + key);
             }
         }
+
+        plugin.getLogger().info("Main Menu Loaded");
         return new GuiConfig.MainMenuConfig(title, rows, fillers, categoryTypeButtons);
 
     }
 
     private GuiConfig.TicketCategoriesMenuConfig loadTicketCategoriesMenu() {
-        String title = ticketCategoriesMenuConfig.getString("title");
+        String title = ChatColor.translateAlternateColorCodes('&', ticketCategoriesMenuConfig.getString("title"));
         int rows = ticketCategoriesMenuConfig.getInt("rows");
         if (rows <= 0 || rows > 6) {
             throw new IllegalArgumentException("Invalid row count in 'TicketCategoriesMenu.yml': " + rows + ". Must be between 1 and 6.");
@@ -161,12 +159,14 @@ public class GuiConfigLoader {
             categoryButtons.put(type, cat);
         }
 
+
+        plugin.getLogger().info("TicketCategoriesMenu Loaded");
         return new GuiConfig.TicketCategoriesMenuConfig(title, rows, fillers, categoryButtons);
 
     }
 
     private GuiConfig.TicketDetailMenuConfig loadTicketDetailMenu() {
-        String title = ticketDetailsMenuConfig.getString("title");
+        String title = ChatColor.translateAlternateColorCodes('&', ticketDetailsMenuConfig.getString("title"));
         int rows = ticketDetailsMenuConfig.getInt("rows");
         if (rows <= 0 || rows > 6) {
             throw new IllegalArgumentException("Invalid row count in 'TicketDetailsMenu.yml': " + rows + ". Must be between 1 and 6.");
@@ -175,29 +175,47 @@ public class GuiConfigLoader {
         GuiConfig.FillerSettings fillers = getFillerSettingsFromSection(fillersSection);
 
         ConfigurationSection detailsSec = ticketDetailsMenuConfig.getConfigurationSection("details");
-        String id = detailsSec.getString("id");
-        String ownerName = detailsSec.getString("owner-name");
-        String status = detailsSec.getString("status");
-        String category = detailsSec.getString("category");
-        String description = detailsSec.getString("description");
-        String creationDate = detailsSec.getString("creation-date");
-        String staffName = detailsSec.getString("staff-name");
-        String assignationDate = detailsSec.getString("assignation-date");
-        String resolveDate = detailsSec.getString("resolve-date");
-        String participants = detailsSec.getString("participants");
+        ItemStack id =
+                getItemStackFromSection(detailsSec.getConfigurationSection("id"));
+        ItemStack ownerName =
+                getItemStackFromSection(detailsSec.getConfigurationSection("owner-name"));
+        ItemStack status =
+                getItemStackFromSection(detailsSec.getConfigurationSection("status"));
+        ItemStack category =
+                getItemStackFromSection(detailsSec.getConfigurationSection("category"));
+        ItemStack description =
+                getItemStackFromSection(detailsSec.getConfigurationSection("description"));
+        ItemStack creationDate =
+                getItemStackFromSection(detailsSec.getConfigurationSection("creation-date"));
+        ItemStack staffName =
+                getItemStackFromSection(detailsSec.getConfigurationSection("staff-name"));
+        ItemStack assignationDate =
+                getItemStackFromSection(detailsSec.getConfigurationSection("assignation-date"));
+        ItemStack resolveDate =
+                getItemStackFromSection(detailsSec.getConfigurationSection("resolve-date"));
+        ItemStack participants =
+                getItemStackFromSection(detailsSec.getConfigurationSection("participants"));
 
         ConfigurationSection buttonsSec = ticketDetailsMenuConfig.getConfigurationSection("buttons");
 
-        ItemStack claim = getItemStackFromSection(buttonsSec.getConfigurationSection("claim"));
-        ItemStack markAsResolved = getItemStackFromSection(buttonsSec.getConfigurationSection("mark-as-resolved"));
-        ItemStack joinParticipants = getItemStackFromSection(buttonsSec.getConfigurationSection("join-participants"));
-        ItemStack leaveParticipants = getItemStackFromSection(buttonsSec.getConfigurationSection("leave-participants"));
-        ItemStack unClaim = getItemStackFromSection(buttonsSec.getConfigurationSection("unclaim"));
-        ItemStack cancelTicket = getItemStackFromSection(buttonsSec.getConfigurationSection("cancel-ticket"));
-        ItemStack pingStaffEnabled = getItemStackFromSection(buttonsSec.getConfigurationSection("ping-staff-enabled"));
+        ItemStack claim =
+                getItemStackFromSection(buttonsSec.getConfigurationSection("claim"));
+        ItemStack markAsResolved =
+                getItemStackFromSection(buttonsSec.getConfigurationSection("mark-as-resolved"));
+        ItemStack joinParticipants =
+                getItemStackFromSection(buttonsSec.getConfigurationSection("join-participants"));
+        ItemStack leaveParticipants =
+                getItemStackFromSection(buttonsSec.getConfigurationSection("leave-participants"));
+        ItemStack unClaim =
+                getItemStackFromSection(buttonsSec.getConfigurationSection("unclaim"));
+        ItemStack cancelTicket =
+                getItemStackFromSection(buttonsSec.getConfigurationSection("cancel-ticket"));
+        ItemStack pingStaffEnabled =
+                getItemStackFromSection(buttonsSec.getConfigurationSection("ping-staff-enabled"));
         ItemStack pingStaffCooldown =
                 getItemStackFromSection(buttonsSec.getConfigurationSection("ping-staff-cooldown"));
 
+        plugin.getLogger().info("TicketDetailsMenu Loaded");
         return new GuiConfig.TicketDetailMenuConfig(title, rows, fillers, id, ownerName, status, category, description
                 , creationDate, staffName, assignationDate, resolveDate, participants, claim, markAsResolved
                 , joinParticipants, leaveParticipants, unClaim, cancelTicket, pingStaffEnabled, pingStaffCooldown);
@@ -205,7 +223,7 @@ public class GuiConfigLoader {
     }
 
     private GuiConfig.TicketsMenuConfig loadTicketsMenu() {
-        String title = ticketsMenuConfig.getString("title");
+        String title = ChatColor.translateAlternateColorCodes('&', ticketsMenuConfig.getString("title"));
         int rows = ticketsMenuConfig.getInt("rows");
         if (rows <= 0 || rows > 6) {
             throw new IllegalArgumentException("Invalid row count in 'TicketsMenu.yml': " + rows + ". Must be between 1 and 6.");
@@ -218,48 +236,61 @@ public class GuiConfigLoader {
                 .mapToInt(Integer::intValue)
                 .toArray();
 
+        ItemStack ticketFormat =
+                getItemStackFromSection(ticketsMenuConfig.getConfigurationSection("ticket-format"));
+
         ConfigurationSection buttonsSec = ticketsMenuConfig.getConfigurationSection("buttons");
         ItemStack next = getItemStackFromSection(buttonsSec.getConfigurationSection("next"));
         int nextSlot = buttonsSec.getInt("next.slot");
 
-        ItemStack previous = getItemStackFromSection(buttonsSec.getConfigurationSection("previous"));
+        ItemStack previous =
+                getItemStackFromSection(buttonsSec.getConfigurationSection("previous"));
         int previousSlot = buttonsSec.getInt("previous.slot");
 
         ItemStack playerFilterButton =
                 getItemStackFromSection(buttonsSec.getConfigurationSection("player-filter-button"));
         int playerFilterSlot = buttonsSec.getInt("player-filter-button.slot");
 
-        ItemStack open = getItemStackFromSection(buttonsSec.getConfigurationSection("OPEN"));
+        ItemStack open =
+                getItemStackFromSection(buttonsSec.getConfigurationSection("open"));
         int openSlot = buttonsSec.getInt("open.slot");
 
-        ItemStack inProgress = getItemStackFromSection(buttonsSec.getConfigurationSection("IN-PROGRESS"));
-        int inProgressSlot = buttonsSec.getInt("in-progress.slot");
+        ItemStack inProgress =
+                getItemStackFromSection(buttonsSec.getConfigurationSection("in_progress"));
+        int inProgressSlot = buttonsSec.getInt("in_progress.slot");
 
-        ItemStack canceled = getItemStackFromSection(buttonsSec.getConfigurationSection("CANCELED"));
+        ItemStack canceled =
+                getItemStackFromSection(buttonsSec.getConfigurationSection("canceled"));
         int canceledSlot = buttonsSec.getInt("canceled.slot");
 
-        ItemStack resolved = getItemStackFromSection(buttonsSec.getConfigurationSection("RESOLVED"));
+        ItemStack resolved =
+                getItemStackFromSection(buttonsSec.getConfigurationSection("resolved"));
         int resolvedSlot = buttonsSec.getInt("resolved.slot");
 
-        ItemStack all = getItemStackFromSection(buttonsSec.getConfigurationSection("ALL"));
+        ItemStack all =
+                getItemStackFromSection(buttonsSec.getConfigurationSection("all"));
         int allSlot = buttonsSec.getInt("all.slot");
 
+        plugin.getLogger().info("TicketsMenu Loaded");
         return new GuiConfig.TicketsMenuConfig(title, rows, fillers, ticketButtons, next, previous
                 , playerFilterButton, open, inProgress, canceled, resolved, all, nextSlot, previousSlot
-                , playerFilterSlot, openSlot, inProgressSlot, canceledSlot, resolvedSlot, allSlot);
+                , playerFilterSlot, openSlot, inProgressSlot, canceledSlot, resolvedSlot, allSlot, ticketFormat);
     }
 
     private GuiConfig.FillerSettings getFillerSettingsFromSection(ConfigurationSection section) {
         Material generalMat = Material.getMaterial(section.getString("general.material"));
-        String generalStr = section.getString("general.name");
+        String generalStr =
+                ChatColor.translateAlternateColorCodes('&', section.getString("general.name"));
         ItemStack general = new ItemBuilder(generalMat).setName(generalStr).build();
 
         Material topRowMat = Material.getMaterial(section.getString("top-row.material"));
-        String topRowStr = section.getString("top-row.name");
+        String topRowStr =
+                ChatColor.translateAlternateColorCodes('&', section.getString("top-row.name"));
         ItemStack topRow = new ItemBuilder(topRowMat).setName(topRowStr).build();
 
         Material bottomRowMat = Material.getMaterial(section.getString("bottom-row.material"));
-        String bottomRowStr = section.getString("bottom-row.name");
+        String bottomRowStr =
+                ChatColor.translateAlternateColorCodes('&', section.getString("bottom-row.name"));
         ItemStack bottomRow = new ItemBuilder(bottomRowMat).setName(bottomRowStr).build();
 
         return new GuiConfig.FillerSettings(topRow, bottomRow, general);
@@ -267,8 +298,13 @@ public class GuiConfigLoader {
 
     private ItemStack getItemStackFromSection(ConfigurationSection section) {
         Material material = Material.getMaterial(section.getString("material"));
-        String name = section.getString("name");
-        List<String> lore = section.getStringList("lore");
+        String name = ChatColor.translateAlternateColorCodes('&', section.getString("name"));
+        List<String> rawLore = section.getStringList("lore");
+
+        List<String> lore = new ArrayList<>();
+        for (String line : rawLore) {
+            lore.add(ChatColor.translateAlternateColorCodes('&', line));
+        }
 
         return new ItemBuilder(material).setName(name).setLore(lore).build();
     }

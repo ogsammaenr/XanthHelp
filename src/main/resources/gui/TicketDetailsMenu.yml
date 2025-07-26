@@ -4,7 +4,7 @@ rows: 6
 fillers:
   general:
     enabled: true
-    material: BLACK_STAINED_GLASS_PANE
+    material: LIGHT_GRAY_STAINED_GLASS_PANE
     name: " "
   top-row:
     enabled: true
@@ -16,16 +16,56 @@ fillers:
     name: " "
 
 details:
-  id: "Ticket Id : %id%"
-  owner-name: "Name : %player-name%"
-  status: "Status : %status%"
-  category: "Category : %category%"
-  description: "Description : %description%"
-  creation-date: "Creation Date : %creation-date%"
-  staff-name: "Staff Name : %staff-name%"
-  assignation-date: "Assignation date : %assignation-date%"
-  resolve-date: "Resolve Date : %resolve-date%"
-  participants: "Participants : %participants%"
+  id:
+    material: NAME_TAG
+    name: "&7Ticket Id"
+    lore:
+      - "&7 %ticket-id%"
+  owner-name:
+    material: PLAYER_HEAD
+    name: "&7Owner Name"
+    lore:
+      - "&8Name : &7%owner-name%"
+  status:
+    material: CANDLE
+    name: "Status"
+    lore:
+      - "&8Status : &7%status%"
+  category:
+    material: BOOK
+    name: "Category"
+    lore:
+      - "&8Category : &7%category%"
+  description:
+    material: PAPER
+    name: "Description"
+    lore:
+      - "&7%description%"
+  creation-date:
+    material: CLOCK
+    name: "Creation Date"
+    lore:
+      - "&7%creation-date%"
+  staff-name:
+    material: PLAYER_HEAD
+    name: "Staff"
+    lore:
+      - "Staff Name : %staff-name%"
+  assignation-date:
+    material: CLOCK
+    name: "Assignation Date"
+    lore:
+      - "&7%assignation-date%"
+  resolve-date:
+    material: CLOCK
+    name: "Resolve Date"
+    lore:
+      - "&7%resolve-date%"
+  participants:
+    material: TERRACOTTA
+    name: "Participants"
+    lore:
+      - "&7%participants%"
 
 buttons:
 

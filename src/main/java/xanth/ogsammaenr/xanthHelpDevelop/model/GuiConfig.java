@@ -12,13 +12,17 @@ public class GuiConfig {
         private FillerSettings fillerSettings;
         private ItemStack acceptButton;
         private ItemStack denyButton;
+        private int acceptSlot;
+        private int denySlot;
 
-        public ConfirmationMenuConfig(String title, int rows, FillerSettings fillerSettings, ItemStack denyButton, ItemStack acceptButton) {
+        public ConfirmationMenuConfig(String title, int rows, FillerSettings fillerSettings, ItemStack denyButton, int denySlot, ItemStack acceptButton, int acceptSlot) {
             this.title = title;
             this.rows = rows;
             this.fillerSettings = fillerSettings;
             this.denyButton = denyButton;
             this.acceptButton = acceptButton;
+            this.acceptSlot = acceptSlot;
+            this.denySlot = denySlot;
         }
 
         public FillerSettings getFillerSettings() {
@@ -29,7 +33,7 @@ public class GuiConfig {
             return rows;
         }
 
-        public ItemStack getAcceptedButton() {
+        public ItemStack getAcceptButton() {
             return acceptButton;
         }
 
@@ -39,6 +43,14 @@ public class GuiConfig {
 
         public String getTitle() {
             return title;
+        }
+
+        public int getAcceptSlot() {
+            return acceptSlot;
+        }
+
+        public int getDenySlot() {
+            return denySlot;
         }
     }
 
@@ -107,16 +119,16 @@ public class GuiConfig {
         private int rows;
         private FillerSettings fillerSettings;
 
-        private String id, ownerName, status, category, description, creationDate, staffName, assignationDate,
+        private ItemStack id, ownerName, status, category, description, creationDate, staffName, assignationDate,
                 resolveDate, participants;
 
         private ItemStack claim, markAsResolved, joinParticipants, leaveParticipants, unclaim, cancelTicket,
                 pingStaff_enabled, pingStaff_cooldown;
 
         public TicketDetailMenuConfig(String title, int rows, FillerSettings fillerSettings
-                , String id, String ownerName, String status, String category
-                , String description, String creationDate, String staffName, String assignationDate
-                , String resolveDate, String participants, ItemStack claim, ItemStack markAsResolved
+                , ItemStack id, ItemStack ownerName, ItemStack status, ItemStack category
+                , ItemStack description, ItemStack creationDate, ItemStack staffName, ItemStack assignationDate
+                , ItemStack resolveDate, ItemStack participants, ItemStack claim, ItemStack markAsResolved
                 , ItemStack joinParticipants, ItemStack leaveParticipants, ItemStack unclaim
                 , ItemStack cancelTicket, ItemStack pingStaff_enabled, ItemStack pingStaff_cooldown) {
 
@@ -155,11 +167,11 @@ public class GuiConfig {
             return title;
         }
 
-        public String getDescription() {
+        public ItemStack getDescription() {
             return description;
         }
 
-        public String getIdButtonMsg() {
+        public ItemStack getIdButton() {
             return id;
         }
 
@@ -195,35 +207,35 @@ public class GuiConfig {
             return unclaim;
         }
 
-        public String getAssignationDateMsg() {
+        public ItemStack getAssignationDate() {
             return assignationDate;
         }
 
-        public String getCategoryMsg() {
+        public ItemStack getCategory() {
             return category;
         }
 
-        public String getCreationDateMsg() {
+        public ItemStack getCreationDate() {
             return creationDate;
         }
 
-        public String getOwnerNameMsg() {
+        public ItemStack getOwnerName() {
             return ownerName;
         }
 
-        public String getParticipantsMsg() {
+        public ItemStack getParticipants() {
             return participants;
         }
 
-        public String getResolveDateMsg() {
+        public ItemStack getResolveDate() {
             return resolveDate;
         }
 
-        public String getStaffNameMsg() {
+        public ItemStack getStaffName() {
             return staffName;
         }
 
-        public String getStatusMsg() {
+        public ItemStack getStatus() {
             return status;
         }
     }
@@ -238,6 +250,8 @@ public class GuiConfig {
         private int nextSlot, previousSlot, playerFilterButtonSlot, openSlot, inProgressSlot, cancelledSlot,
                 resolvedSlot, allSlot;
 
+        private ItemStack ticketFormat;
+
         public TicketsMenuConfig(String title, int rows, FillerSettings fillerSettings
                 , int[] ticketButtons, ItemStack next, ItemStack previous
                 , ItemStack playerFilterButton, ItemStack open
@@ -246,7 +260,7 @@ public class GuiConfig {
                 , int nextSlot, int previousSlot
                 , int playerFilterButtonSlot, int openSlot
                 , int inProgressSlot, int cancelledSlot
-                , int resolvedSlot, int allSlot) {
+                , int resolvedSlot, int allSlot, ItemStack ticketFormat) {
             this.title = title;
             this.rows = rows;
             this.fillerSettings = fillerSettings;
@@ -267,6 +281,7 @@ public class GuiConfig {
             this.cancelledSlot = cancelledSlot;
             this.resolvedSlot = resolvedSlot;
             this.allSlot = allSlot;
+            this.ticketFormat = ticketFormat;
         }
 
         public String getTitle() {
@@ -347,6 +362,10 @@ public class GuiConfig {
 
         public int getResolvedSlot() {
             return resolvedSlot;
+        }
+
+        public ItemStack getTicketFormat() {
+            return ticketFormat;
         }
     }
 

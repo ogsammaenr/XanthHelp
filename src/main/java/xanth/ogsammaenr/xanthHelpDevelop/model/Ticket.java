@@ -1,5 +1,8 @@
 package xanth.ogsammaenr.xanthHelpDevelop.model;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,8 @@ public class Ticket {
     private Ticket() {
         // private constructor to force use of Builder
     }
+
+
 
     /* ==== GETTERS ==== */
 
@@ -199,6 +204,17 @@ public class Ticket {
         }
     }
 
+    public String getOwnerName() {
+        OfflinePlayer owner = creatorId != null ? Bukkit.getOfflinePlayer(creatorId) : null;
+        return owner.getName();
+    }
+
+    public String getStaffName() {
+        if (staffId == null) return "N/A";
+        OfflinePlayer owner = Bukkit.getOfflinePlayer(staffId);
+        return owner.getName();
+    }
+
     // === BUILDER ===
 
     /**
@@ -217,8 +233,8 @@ public class Ticket {
         private LocalDateTime assignationDate;
         private LocalDateTime resolveDate;
 
-        private List<UUID> participants;
-        private List<UUID> activeParticipants;
+        private List<UUID> participants = new ArrayList<>();
+        private List<UUID> activeParticipants = new ArrayList<>();
 
         /**
          * Instantiates a new Builder.
@@ -238,6 +254,7 @@ public class Ticket {
             this.category = category;
             this.description = description;
             this.creationDate = creationDate;
+            this.participants.add(creatorId);
         }
 
         /**
@@ -304,7 +321,9 @@ public class Ticket {
             Ticket ticket = new Ticket();
 
             ticket.ticketId = this.ticketId;
+            if (ticketId == null) System.out.println(ticketId + " yok");
             ticket.creatorId = this.creatorId;
+            if (creatorId == null) System.out.println(creatorId + " yok");
             ticket.status = this.status;
             ticket.category = this.category;
             ticket.description = this.description;

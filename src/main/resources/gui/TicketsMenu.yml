@@ -4,7 +4,7 @@ rows: 6
 fillers:
   general:
     enabled: true
-    material: BLACK_STAINED_GLASS_PANE
+    material: LIGHT_GRAY_STAINED_GLASS_PANE
     name: " "
   top-row:
     enabled: true
@@ -16,6 +16,20 @@ fillers:
     name: " "
 
 ticket-buttons: [ 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45 ]
+ticket-format:
+  name: "&7 %ticket-id%"
+  material: PAPER
+  lore:
+    - "Owner : %owner-name%"
+    - "Category : %category%"
+    - "Status : %status%"
+    - "Staff : %staff-name%"
+    - ""
+    - "Description : %description%"
+    - ""
+    - "Creation Date : %creation-date%"
+    - "Assignment Date : %assignment-date%"
+    - "Resolve Date : %resolve-date%"
 
 buttons:
   next:
@@ -38,35 +52,35 @@ buttons:
     lore:
       - "player filter"
 
-  OPEN:
+  open:
     slot: 47
     name: "Open"
     material: GRAY_CONCRETE
     lore:
       - "open"
 
-  IN_PROGRESS:
+  in_progress:
     slot: 48
     name: "In Progress"
     material: YELLOW_CONCRETE
     lore:
       - "In Progress"
 
-  CANCELED:
+  canceled:
     slot: 49
     name: "Canceled"
     material: RED_CONCRETE
     lore:
       - "cancelled"
 
-  RESOLVED:
+  resolved:
     slot: 50
     name: "Resolved"
     material: GREEN_CONCRETE
     lore:
       - "resolved"
 
-  ALL:
+  all:
     slot: 51
     name: "All"
     material: LIME_CONCRETE

@@ -4,7 +4,7 @@ rows: 6
 fillers:
   general:
     enabled: true
-    material: BLACK_STAINED_GLASS_PANE
+    material: LIGHT_GRAY_STAINED_GLASS_PANE
     name: " "
   top-row:
     enabled: true
@@ -17,7 +17,7 @@ fillers:
 
 categories:
   TECHNIC:
-    bug_report: 10
+    bug-report: 10
     feature-request: 11
 
   GENERAL:

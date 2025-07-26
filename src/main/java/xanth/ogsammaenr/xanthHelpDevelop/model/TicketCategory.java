@@ -1,6 +1,8 @@
 package xanth.ogsammaenr.xanthHelpDevelop.model;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import xanth.ogsammaenr.xanthHelpDevelop.util.ItemBuilder;
 
 import java.util.List;
 
@@ -77,5 +79,24 @@ public class TicketCategory {
      */
     public TicketCategoryType getType() {
         return type;
+    }
+
+    public ItemStack toItemStack() {
+        return new ItemBuilder(icon)
+                .setName(displayName)
+                .setLore(lore)
+                .setNBT("ticketCategory", id)
+                .build();
+    }
+
+    @Override
+    public String toString() {
+        return "TicketCategory{" +
+               "id='" + id + '\'' +
+               ", displayName='" + displayName + '\'' +
+               ", lore=" + lore +
+               ", type=" + type +
+               ", icon=" + icon +
+               '}';
     }
 }

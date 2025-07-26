@@ -2,14 +2,13 @@ package xanth.ogsammaenr.xanthHelpDevelop;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import xanth.ogsammaenr.xanthHelpDevelop.manager.GuiConfigManager;
-import xanth.ogsammaenr.xanthHelpDevelop.manager.TicketCategoryManager;
-import xanth.ogsammaenr.xanthHelpDevelop.manager.TicketManager;
-import xanth.ogsammaenr.xanthHelpDevelop.storage.CategoryLoader;
-import xanth.ogsammaenr.xanthHelpDevelop.storage.SQLiteConnector;
-import xanth.ogsammaenr.xanthHelpDevelop.storage.SQLiteTicketDAO;
-import xanth.ogsammaenr.xanthHelpDevelop.storage.TicketDAO;
+import xanth.ogsammaenr.xanthHelpDevelop.command.HelpCommand;
+import xanth.ogsammaenr.xanthHelpDevelop.listener.ChatInputListener;
+import xanth.ogsammaenr.xanthHelpDevelop.listener.InventoryClickListener;
+import xanth.ogsammaenr.xanthHelpDevelop.manager.*;
+import xanth.ogsammaenr.xanthHelpDevelop.storage.*;
 
 import java.io.File;
 
@@ -23,30 +22,51 @@ public final class XanthHelp extends JavaPlugin {
     private TicketCategoryManager ticketCategoryManager;
     private CategoryLoader categoryLoader;
     private GuiConfigManager guiConfigManager;
+    private GuiConfigLoader guiConfigLoader;
+    private TicketInputManager ticketInputManager;
+    private PingStaffManager pingStaffManager;
+
+    private InventoryClickListener inventoryClickListener;
+    private ChatInputListener chatInputListener;
 
     @Override
     public void onEnable() {
         instance = this;
+
+        saveResource("categories.yml", false);
 
         File dataFolder = getDataFolder();
         if (!dataFolder.exists()) dataFolder.mkdirs();
         File dbFile = new File(dataFolder, "tickets.db");
 
         File categoryFile = new File(dataFolder, "categories.yml");
-        FileConfiguration categories = new YamlConfiguration().loadConfiguration(categoryFile);
+        FileConfiguration categoriesFile = new YamlConfiguration().loadConfiguration(categoryFile);
+
+        this.ticketCategoryManager = new TicketCategoryManager(this);
+        this.categoryLoader = new CategoryLoader(categoriesFile, this);
 
         this.databaseConnector = new SQLiteConnector(dbFile.getAbsolutePath());
         this.ticketDAO = new SQLiteTicketDAO(databaseConnector);
-
-
         this.ticketManager = new TicketManager(ticketDAO);
-        this.ticketCategoryManager = new TicketCategoryManager(this);
-        this.categoryLoader = new CategoryLoader(categories, this);
-
-        this.guiConfigManager = new GuiConfigManager(this);
 
         categoryLoader.loadAll();
+        ticketManager.loadTickets();
 
+        this.guiConfigManager = new GuiConfigManager(this);
+        this.guiConfigLoader = new GuiConfigLoader(this);
+
+        guiConfigLoader.loadAllConfigs();
+
+        this.ticketInputManager = new TicketInputManager();
+        this.pingStaffManager = new PingStaffManager();
+
+        getCommand("xanthhelp").setExecutor(new HelpCommand());
+
+        this.inventoryClickListener = new InventoryClickListener(this);
+        this.chatInputListener = new ChatInputListener();
+        PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(inventoryClickListener, this);
+        pm.registerEvents(chatInputListener, this);
 
         getLogger().info("******* XanthHelp Enabled *******");
     }
@@ -72,6 +92,14 @@ public final class XanthHelp extends JavaPlugin {
 
     public GuiConfigManager getGuiConfigManager() {
         return guiConfigManager;
+    }
+
+    public TicketInputManager getTicketInputManager() {
+        return ticketInputManager;
+    }
+
+    public PingStaffManager getPingStaffManager() {
+        return pingStaffManager;
     }
 
     public static XanthHelp getInstance() {

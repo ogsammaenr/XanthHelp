@@ -16,6 +16,8 @@ public class TicketManager {
     private final TicketDAO ticketDAO;
     private final Map<String, Ticket> tickets = new ConcurrentHashMap<>();
 
+    private int lastTicketNumber;
+
     public TicketManager(TicketDAO ticketDAO) {
         this.ticketDAO = ticketDAO;
     }
@@ -25,6 +27,7 @@ public class TicketManager {
      */
     public void loadTickets() {
         ticketDAO.findAll().forEach(ticket -> tickets.put(ticket.getTicketId(), ticket));
+        lastTicketNumber = tickets.values().size() + 1;
     }
 
     /**
@@ -97,63 +100,22 @@ public class TicketManager {
         });
     }
 
-    /*
-     * +-------------------------------+
-     * |     Status-based getters      |
-     * +-------------------------------+
-     */
-
-    /**
-     * @return Get tickets with {@link TicketStatus#OPEN} status
-     */
-    public Collection<Ticket> getOpenTickets() {
-        return tickets.values().stream()
-                .filter(t -> t.getStatus() == TicketStatus.OPEN)
-                .collect(Collectors.toList());
+    public int getLastTicketNumber() {
+        return lastTicketNumber++;
     }
 
     /**
-     * @return Get tickets with {@link TicketStatus#IN_PROGRESS} status
-     */
-    public Collection<Ticket> getInProgressTickets() {
-        return tickets.values().stream()
-                .filter(t -> t.getStatus() == TicketStatus.IN_PROGRESS)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * @return Get tickets with {@link TicketStatus#RESOLVED} status
-     */
-    public Collection<Ticket> getResolvedTickets() {
-        return tickets.values().stream()
-                .filter(t -> t.getStatus() == TicketStatus.RESOLVED)
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * @return Get tickets with {@link TicketStatus#CANCELED} status
-     */
-    public Collection<Ticket> getCanceledTickets() {
-        return tickets.values().stream()
-                .filter(t -> t.getStatus() == TicketStatus.CANCELED)
-                .collect(Collectors.toList());
-    }
-
-    /*
-     * +------------------------------+
-     * |     Player-based getters     |
-     * +------------------------------+
-     */
-
-    /**
-     * Retrieves tickets where the specified player is the creator/owner.
+     * Retrieves tickets based on optional status and/or owner UUID filters.
      *
-     * @param ownerId the UUID of the ticket creator
-     * @return a collection of tickets created by the specified owner, or an empty list if none
+     * @param status  (nullable) TicketStatus to filter by
+     * @param ownerId (nullable) Owner UUID to filter by
+     * @return a collection of tickets that match the filters
      */
-    public Collection<Ticket> getTicketsByOwner(UUID ownerId) {
+    public Collection<Ticket> getTicketsFiltered(TicketStatus status, UUID ownerId) {
         return tickets.values().stream()
-                .filter(ticket -> ticket.getCreatorId() != null && ticket.getCreatorId().equals(ownerId))
+                .filter(ticket -> status == null || ticket.getStatus() == status)
+                .filter(ticket -> ownerId == null ||
+                                  (ticket.getCreatorId() != null && ticket.getCreatorId().equals(ownerId)))
                 .collect(Collectors.toList());
     }
 
